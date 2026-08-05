@@ -22,3 +22,10 @@ datasources:
       httpMethod: POST
       prometheusType: Mimir
       prometheusVersion: 2.9.1
+
+  - name: TestData
+    type: testdata
+    access: proxy
+    uid: testdata
+    isDefault: false
+    editable: true

@@ -28,8 +28,51 @@ prometheus.scrape "stack" {
   scrape_interval = "15s"
 }
 
-// Optional local log example (Alloy self logs via stdout aren't scraped here).
-// Add discovery.docker / loki.source.docker when you want container logs.
+// NestJS API metrics -> Mimir
+prometheus.scrape "nestjs_demo" {
+  targets = [
+    {
+      "__address__" = "nestjs-observability-demo:3000",
+      "job"         = "nestjs-observability-demo",
+    },
+  ]
+  metrics_path    = "/metrics"
+  forward_to      = [prometheus.remote_write.mimir.receiver]
+  scrape_interval = "15s"
+}
+
+// Discover the demo API container and attach useful Loki stream labels.
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
+}
+
+discovery.relabel "nestjs_logs" {
+  targets = discovery.docker.containers.targets
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/nestjs-observability-demo"
+    action        = "keep"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.*)"
+    target_label  = "container"
+  }
+
+  rule {
+    target_label = "service_name"
+    replacement  = "nestjs-observability-demo"
+  }
+}
+
+loki.source.docker "nestjs_logs" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.relabel.nestjs_logs.output
+  forward_to = [loki.write.default.receiver]
+}
+
 loki.write "default" {
   endpoint {
     url = "http://loki:3100/loki/api/v1/push"

@@ -1,5 +1,14 @@
 services:
 
+  nestjs-observability-demo:
+    build:
+      context: ./nestjs-observability-demo
+    container_name: nestjs-observability-demo
+    ports:
+      - "3001:3000"
+    networks:
+      - grafana-monitoring
+
   grafana:
     image: grafana/grafana:13.0.1
     container_name: grafana-monitoring-grafana
@@ -50,6 +59,7 @@ services:
       - "12345:12345"
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
       - run
       - /etc/alloy/config.alloy
@@ -57,6 +67,7 @@ services:
     depends_on:
       - loki
       - mimir
+      - nestjs-observability-demo
     networks:
       - grafana-monitoring
 
