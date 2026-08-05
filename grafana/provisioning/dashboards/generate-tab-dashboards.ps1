@@ -257,15 +257,16 @@ $dash = New-Dash 'tab-dependency-metrics' 'Dependency Metrics' 'Tab: Dependency 
 Save-DashJson $dash '04-dependency-metrics.json'
 
 # --- 5. Business Telemetry ---
+# Prefer raw counters for KPIs: increase()/rate() stay empty until 2+ scrapes exist.
 $p = @()
-$p += (Stat 1 0 0 6 4 'Transactions' 'sum(increase(business_transactions_total[$__range])) or vector(0)' 'short' 0)
-$p += (Stat 2 6 0 6 4 'Successful' 'sum(increase(business_transactions_total{outcome="success"}[$__range])) or vector(0)' 'short' 0)
-$p += (Stat 3 12 0 6 4 'Failed' 'sum(increase(business_transactions_total{outcome="failure"}[$__range])) or vector(0)' 'short' 0)
-$p += (Stat 4 18 0 6 4 'Business value (USD)' 'sum(increase(business_revenue_total[$__range])) or vector(0)' 'currency:USD' 2)
-$p += (Timeseries 5 0 4 12 8 'Transactions by outcome / channel' @(@{ expr='sum by (outcome, channel) (rate(business_transactions_total[$__rate_interval]))'; legend='{{outcome}} / {{channel}}' }) 'ops' 'bars' 'normal')
-$p += (Timeseries 6 12 4 12 8 'Revenue rate' @(@{ expr='sum by (channel) (rate(business_revenue_total[$__rate_interval]))'; legend='{{channel}}' }) 'currency:USD')
-$p += (Timeseries 7 0 12 12 8 'Items processed' @(@{ expr='sum by (transaction, channel) (rate(business_items_total[$__rate_interval]))'; legend='{{transaction}} / {{channel}}' }) 'ops' 'bars' 'normal')
-$p += (Logs 8 12 12 12 8 'Business transaction logs' '{service_name="nestjs-observability-demo"} | json | event="business_transaction"')
+$p += (Stat 1 0 0 6 4 'Transactions' 'sum(business_transactions_total) or vector(0)' 'short' 0 'Total checkout transactions since the API process started. Generated only by POST /api/checkout.')
+$p += (Stat 2 6 0 6 4 'Successful' 'sum(business_transactions_total{outcome="success"}) or vector(0)' 'short' 0)
+$p += (Stat 3 12 0 6 4 'Failed' 'sum(business_transactions_total{outcome="failure"}) or vector(0)' 'short' 0)
+$p += (Stat 4 18 0 6 4 'Business value (USD)' 'sum(business_revenue_total) or vector(0)' 'currency:USD' 2)
+$p += (Timeseries 5 0 4 12 8 'Transactions by outcome / channel' @(@{ expr='sum by (outcome, channel) (increase(business_transactions_total[$__rate_interval]))'; legend='{{outcome}} / {{channel}}' }) 'short' 'bars' 'normal')
+$p += (Timeseries 6 12 4 12 8 'Revenue' @(@{ expr='sum by (channel) (increase(business_revenue_total[$__rate_interval]))'; legend='{{channel}}' }) 'currency:USD' 'bars' 'normal')
+$p += (Timeseries 7 0 12 12 8 'Items processed' @(@{ expr='sum by (transaction, channel) (increase(business_items_total[$__rate_interval]))'; legend='{{transaction}} / {{channel}}' }) 'short' 'bars' 'normal')
+$p += (Logs 8 12 12 12 8 'Business transaction logs' '{service_name="nestjs-observability-demo"} | json | event="business_transaction"' 'Only POST /api/checkout emits event=business_transaction. Folders 01-08 will not create these logs.')
 
 $dash = New-Dash 'tab-business-telemetry' 'Business Telemetry' 'Tab: Business Telemetry — checkout transactions, revenue, items, and business event logs.' $p @('nestjs','observability','tabs','business')
 Save-DashJson $dash '05-business-telemetry.json'

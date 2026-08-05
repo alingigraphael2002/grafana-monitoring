@@ -150,7 +150,7 @@
                                            "legendFormat":  "Transactions",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "sum(increase(business_transactions_total[$__range])) or vector(0)",
+                                           "expr":  "sum(business_transactions_total) or vector(0)",
                                            "refId":  "A",
                                            "range":  false
                                        }
@@ -212,7 +212,7 @@
                                            "legendFormat":  "Successful",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "sum(increase(business_transactions_total{outcome=\"success\"}[$__range])) or vector(0)",
+                                           "expr":  "sum(business_transactions_total{outcome=\"success\"}) or vector(0)",
                                            "refId":  "A",
                                            "range":  false
                                        }
@@ -274,7 +274,7 @@
                                            "legendFormat":  "Failed",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "sum(increase(business_transactions_total{outcome=\"failure\"}[$__range])) or vector(0)",
+                                           "expr":  "sum(business_transactions_total{outcome=\"failure\"}) or vector(0)",
                                            "refId":  "A",
                                            "range":  false
                                        }
@@ -336,7 +336,7 @@
                                            "legendFormat":  "Business value (USD)",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "sum(increase(business_revenue_total[$__range])) or vector(0)",
+                                           "expr":  "sum(business_revenue_total) or vector(0)",
                                            "refId":  "A",
                                            "range":  false
                                        }
@@ -400,7 +400,7 @@
                                        {
                                            "editorMode":  "code",
                                            "legendFormat":  "{{outcome}} / {{channel}}",
-                                           "expr":  "sum by (outcome, channel) (rate(business_transactions_total[$__rate_interval]))",
+                                           "expr":  "sum by (outcome, channel) (increase(business_transactions_total[$__rate_interval]))",
                                            "refId":  "A",
                                            "range":  true
                                        }
@@ -464,7 +464,7 @@
                                        {
                                            "editorMode":  "code",
                                            "legendFormat":  "{{channel}}",
-                                           "expr":  "sum by (channel) (rate(business_revenue_total[$__rate_interval]))",
+                                           "expr":  "sum by (channel) (increase(business_revenue_total[$__rate_interval]))",
                                            "refId":  "A",
                                            "range":  true
                                        }
@@ -528,7 +528,7 @@
                                        {
                                            "editorMode":  "code",
                                            "legendFormat":  "{{transaction}} / {{channel}}",
-                                           "expr":  "sum by (transaction, channel) (rate(business_items_total[$__rate_interval]))",
+                                           "expr":  "sum by (transaction, channel) (increase(business_items_total[$__rate_interval]))",
                                            "refId":  "A",
                                            "range":  true
                                        }
