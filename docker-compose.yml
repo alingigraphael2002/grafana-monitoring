@@ -1,0 +1,70 @@
+services:
+
+  grafana:
+    image: grafana/grafana:13.0.1
+    container_name: grafana-monitoring-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - grafana-monitoring
+
+
+  loki:
+    image: grafana/loki:3.6.14
+    container_name: grafana-monitoring-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/config.yaml
+    command:
+      - -config.file=/etc/loki/config.yaml
+    networks:
+      - grafana-monitoring
+
+
+  mimir:
+    image: grafana/mimir:latest
+    container_name: grafana-monitoring-mimir
+    ports:
+      - "9009:9009"
+    volumes:
+      - ./mimir/mimir-config.yaml:/etc/mimir/config.yaml
+    command:
+      - -target=all
+      - -config.file=/etc/mimir/config.yaml
+    networks:
+      - grafana-monitoring
+
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: grafana-monitoring-alloy
+    ports:
+      - "12345:12345"
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --server.http.listen-addr=0.0.0.0:12345
+    depends_on:
+      - loki
+      - mimir
+    networks:
+      - grafana-monitoring
+
+
+networks:
+  grafana-monitoring:
+    name: grafana-monitoring
+
+
+volumes:
+  grafana-storage:

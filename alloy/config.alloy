@@ -1,0 +1,37 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+// Built-in Alloy metrics -> Mimir
+prometheus.exporter.self "alloy" {}
+
+prometheus.scrape "alloy" {
+  targets    = prometheus.exporter.self.alloy.targets
+  forward_to = [prometheus.remote_write.mimir.receiver]
+  scrape_interval = "15s"
+}
+
+prometheus.remote_write "mimir" {
+  endpoint {
+    url = "http://mimir:9009/api/v1/push"
+  }
+}
+
+// Example: scrape Loki and Mimir HTTP metrics too
+prometheus.scrape "stack" {
+  targets = [
+    {"__address__" = "loki:3100", "job" = "loki"},
+    {"__address__" = "mimir:9009", "job" = "mimir"},
+  ]
+  forward_to      = [prometheus.remote_write.mimir.receiver]
+  scrape_interval = "15s"
+}
+
+// Optional local log example (Alloy self logs via stdout aren't scraped here).
+// Add discovery.docker / loki.source.docker when you want container logs.
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
