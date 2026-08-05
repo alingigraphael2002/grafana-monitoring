@@ -1,0 +1,209 @@
+{
+  "info": {
+    "_postman_id": "7d59804e-8689-42c0-8562-73c04e9c2a1a",
+    "name": "NestJS Observability Demo",
+    "description": "Separated requests for generating Loki logs and Mimir metrics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "slowDelayMs", "value": "1500" },
+    { "key": "retryFailures", "value": "2" }
+  ],
+  "item": [
+    {
+      "name": "01 - Service and Health",
+      "item": [
+        {
+          "name": "Service information",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/" },
+          "response": []
+        },
+        {
+          "name": "Health check",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Service is healthy', () => pm.expect(pm.response.json().status).to.eql('ok'));"
+            ] }
+          }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/health" },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Successful Requests",
+      "item": [
+        {
+          "name": "Hello - default",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/hello" },
+          "response": []
+        },
+        {
+          "name": "Hello - custom name and request ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-request-id", "value": "postman-hello-{{$guid}}" }],
+            "url": "{{baseUrl}}/api/hello?name=Grafana"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Request and Response Size",
+      "item": [
+        {
+          "name": "Echo - small JSON payload",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Hello from Postman\",\n  \"source\": \"small-payload-test\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/echo"
+          },
+          "response": []
+        },
+        {
+          "name": "Echo - larger structured payload",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"{{$guid}}\",\n  \"customer\": {\"name\": \"Grafana Learner\", \"email\": \"learner@example.com\"},\n  \"items\": [\n    {\"sku\": \"DEMO-001\", \"quantity\": 2, \"price\": 19.99},\n    {\"sku\": \"DEMO-002\", \"quantity\": 1, \"price\": 49.99}\n  ],\n  \"metadata\": {\"source\": \"postman\", \"purpose\": \"payload-size testing\"}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/echo"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Performance and Duration",
+      "item": [
+        {
+          "name": "Slow - configured delay",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/slow?ms={{slowDelayMs}}" },
+          "response": []
+        },
+        {
+          "name": "Slow - 5 seconds",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/slow?ms=5000" },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Errors and Timeouts",
+      "description": "These responses intentionally have error status codes.",
+      "item": [
+        {
+          "name": "Intentional HTTP 500",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.test('Intentional status is 500', () => pm.response.to.have.status(500));"] }
+          }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/error" },
+          "response": []
+        },
+        {
+          "name": "Simulated HTTP 504 timeout",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.test('Intentional status is 504', () => pm.response.to.have.status(504));"] }
+          }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/timeout" },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 - Retry Simulation",
+      "item": [
+        {
+          "name": "Retry - configured failures",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/retry?failures={{retryFailures}}" },
+          "response": []
+        },
+        {
+          "name": "Retry - maximum 5 failures",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/retry?failures=5" },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "07 - Rate Limit Sequence",
+      "description": "Run this folder in Collection Runner. Requests 1-5 are accepted; 6-7 should return 429. The limit resets after one minute or an API restart.",
+      "item": [
+        {
+          "name": "01 - Accepted",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rate-limit" },
+          "response": []
+        },
+        {
+          "name": "02 - Accepted",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rate-limit" },
+          "response": []
+        },
+        {
+          "name": "03 - Accepted",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rate-limit" },
+          "response": []
+        },
+        {
+          "name": "04 - Accepted",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rate-limit" },
+          "response": []
+        },
+        {
+          "name": "05 - Accepted",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rate-limit" },
+          "response": []
+        },
+        {
+          "name": "06 - Rejected with HTTP 429",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.test('Rate limit status is 429', () => pm.response.to.have.status(429));"] }
+          }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rate-limit" },
+          "response": []
+        },
+        {
+          "name": "07 - Rejected with HTTP 429",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.test('Rate limit status is 429', () => pm.response.to.have.status(429));"] }
+          }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rate-limit" },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "08 - Observability",
+      "item": [
+        {
+          "name": "Prometheus metrics",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Metrics status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('API metric exists', () => pm.expect(pm.response.text()).to.include('api_requests_total'));"
+            ] }
+          }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/metrics" },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
