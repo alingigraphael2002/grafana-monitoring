@@ -1,6 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { MetricsService } from './metrics.service';
+import { writeTelemetryLog } from './telemetry-log';
 
 @Injectable()
 export class RequestObservabilityMiddleware implements NestMiddleware {
@@ -12,15 +13,11 @@ export class RequestObservabilityMiddleware implements NestMiddleware {
     res.setHeader('x-request-id', requestId);
     this.metrics.active.inc();
 
-    console.log(JSON.stringify({
-      timestamp: new Date().toISOString(),
-      level: 'info',
-      service: 'nestjs-observability-demo',
-      event: 'request_started',
+    writeTelemetryLog('info', 'request_started', {
       request_id: requestId,
       method: req.method,
       path: req.path,
-    }));
+    });
 
     res.on('finish', () => {
       const elapsedSeconds = Number(process.hrtime.bigint() - startedAt) / 1e9;
@@ -41,19 +38,36 @@ export class RequestObservabilityMiddleware implements NestMiddleware {
         responseBytes,
       );
 
-      console.log(JSON.stringify({
-        timestamp: new Date().toISOString(),
-        level: res.statusCode >= 500 ? 'error' : res.statusCode >= 400 ? 'warn' : 'info',
-        service: 'nestjs-observability-demo',
-        event: 'request_completed',
-        request_id: requestId,
-        method: req.method,
-        route,
-        status_code: res.statusCode,
-        duration_ms: Math.round(elapsedSeconds * 1000),
-        request_bytes: requestBytes,
-        response_bytes: responseBytes,
-      }));
+      if (res.statusCode >= 400) {
+        this.metrics.errors.inc({
+          error_type: this.errorType(res.statusCode),
+          operation: route,
+          dependency: 'none',
+          status_code: statusCode,
+        });
+        this.metrics.sloBreaches.inc({ indicator: 'success_rate', route });
+      }
+      if (res.statusCode >= 500) {
+        this.metrics.sloBreaches.inc({ indicator: 'availability', route });
+      }
+      if (elapsedSeconds > 0.5) {
+        this.metrics.sloBreaches.inc({ indicator: 'p95_latency_seconds', route });
+      }
+
+      writeTelemetryLog(
+        res.statusCode >= 500 ? 'error' : res.statusCode >= 400 ? 'warn' : 'info',
+        'request_completed',
+        {
+          request_id: requestId,
+          method: req.method,
+          route,
+          status_code: res.statusCode,
+          outcome: res.statusCode < 400 ? 'success' : 'failure',
+          duration_ms: Math.round(elapsedSeconds * 1000),
+          request_bytes: requestBytes,
+          response_bytes: responseBytes,
+        },
+      );
     });
 
     next();
@@ -66,5 +80,14 @@ export class RequestObservabilityMiddleware implements NestMiddleware {
     return req.path
       .replace(/\/[0-9]+(?=\/|$)/g, '/:id')
       .replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
+  }
+
+  private errorType(statusCode: number): string {
+    if (statusCode === 401) return 'authentication';
+    if (statusCode === 403) return 'authorization';
+    if (statusCode === 429) return 'rate_limit';
+    if (statusCode === 504) return 'timeout';
+    if (statusCode >= 500) return 'server';
+    return 'client';
   }
 }

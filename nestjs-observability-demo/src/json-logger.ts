@@ -1,4 +1,5 @@
 import { LoggerService } from '@nestjs/common';
+import { LogLevel, writeTelemetryLog } from './telemetry-log';
 
 export class JsonLogger implements LoggerService {
   log(message: unknown, context?: string): void {
@@ -22,28 +23,16 @@ export class JsonLogger implements LoggerService {
   }
 
   private write(
-    level: string,
+    level: LogLevel,
     message: unknown,
     context?: string,
     trace?: string,
   ): void {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      level,
-      service: 'nestjs-observability-demo',
+    writeTelemetryLog(level, 'application_log', {
       context,
       message: this.formatMessage(message),
-      ...(trace ? { trace } : {}),
-    };
-
-    const line = JSON.stringify(entry);
-    if (level === 'error') {
-      console.error(line);
-    } else if (level === 'warn') {
-      console.warn(line);
-    } else {
-      console.log(line);
-    }
+      ...(trace ? { error_stack: trace } : {}),
+    });
   }
 
   private formatMessage(message: unknown): unknown {

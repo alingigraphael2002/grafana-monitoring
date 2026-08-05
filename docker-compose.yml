@@ -6,6 +6,13 @@ services:
     container_name: nestjs-observability-demo
     ports:
       - "3001:3000"
+    environment:
+      - OTEL_SERVICE_NAME=nestjs-observability-demo
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=development,service.version=1.0.0
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://alloy:4318
+    depends_on:
+      - alloy
+
     networks:
       - grafana-monitoring
 
@@ -51,12 +58,29 @@ services:
     networks:
       - grafana-monitoring
 
+  tempo:
+    image: grafana/tempo:3.0.2
+    container_name: grafana-monitoring-tempo
+    ports:
+      - "3200:3200"
+    volumes:
+      - ./tempo/tempo-config.yaml:/etc/tempo/config.yaml
+      - tempo-data:/var/tempo
+    command:
+      - -config.file=/etc/tempo/config.yaml
+    networks:
+      - grafana-monitoring
+
+
+
 
   alloy:
     image: grafana/alloy:latest
     container_name: grafana-monitoring-alloy
     ports:
       - "12345:12345"
+      - "4317:4317"
+      - "4318:4318"
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -67,7 +91,7 @@ services:
     depends_on:
       - loki
       - mimir
-      - nestjs-observability-demo
+      - tempo
     networks:
       - grafana-monitoring
 
@@ -79,3 +103,4 @@ networks:
 
 volumes:
   grafana-storage:
+  tempo-data:

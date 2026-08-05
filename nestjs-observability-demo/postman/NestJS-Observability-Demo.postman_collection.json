@@ -6,9 +6,11 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "baseUrl", "value": "http://localhost:3001" },
     { "key": "slowDelayMs", "value": "1500" },
-    { "key": "retryFailures", "value": "2" }
+    { "key": "retryFailures", "value": "2" },
+    { "key": "dependency", "value": "postgresql_citus" },
+    { "key": "failAt", "value": "external_api" }
   ],
   "item": [
     {
@@ -197,10 +199,178 @@
             "listen": "test",
             "script": { "exec": [
               "pm.test('Metrics status is 200', () => pm.response.to.have.status(200));",
-              "pm.test('API metric exists', () => pm.expect(pm.response.text()).to.include('api_requests_total'));"
+              "pm.test('API metric exists', () => pm.expect(pm.response.text()).to.include('api_requests_total'));",
+              "pm.test('Dependency metric exists', () => pm.expect(pm.response.text()).to.include('dependency_requests_total'));",
+              "pm.test('Business metric exists', () => pm.expect(pm.response.text()).to.include('business_transactions_total'));"
             ] }
           }],
           "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/metrics" },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "09 - Distributed Tracing Workflow",
+      "description": "Each checkout creates an HTTP server span plus child spans for gateway, authentication, authorisation, application logic, PostgreSQL/Citus, Redis, Kafka publish/consume, an external API, and file storage.",
+      "item": [
+        {
+          "name": "Checkout - complete successful trace",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Checkout succeeds', () => pm.response.to.have.status(201));",
+              "pm.test('Trace ID returned', () => pm.expect(pm.response.json().trace_id).to.be.a('string'));"
+            ] }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-request-id", "value": "checkout-success-{{$guid}}" },
+              { "key": "x-demo-role", "value": "customer" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"order_id\": \"{{$guid}}\",\n  \"amount\": 149.95,\n  \"items\": 3,\n  \"channel\": \"postman\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/api/checkout"
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout - controlled dependency failure",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Dependency failure returns 503', () => pm.response.to.have.status(503));"] } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-request-id", "value": "checkout-failure-{{$guid}}" },
+              { "key": "x-demo-role", "value": "customer" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"order_id\": \"{{$guid}}\",\n  \"amount\": 79.50,\n  \"items\": 2,\n  \"channel\": \"postman\",\n  \"fail_at\": \"{{failAt}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/api/checkout"
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout - Kafka consume failure",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Kafka consume failure returns 503', () => pm.response.to.have.status(503));"] } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-request-id", "value": "checkout-kafka-consume-{{$guid}}" },
+              { "key": "x-demo-role", "value": "customer" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"order_id\": \"{{$guid}}\",\n  \"amount\": 55.25,\n  \"items\": 1,\n  \"channel\": \"postman\",\n  \"fail_at\": \"kafka_consume\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/api/checkout"
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout - authorization denied",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Authorization failure returns 403', () => pm.response.to.have.status(403));"] } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-request-id", "value": "checkout-denied-{{$guid}}" },
+              { "key": "x-demo-role", "value": "denied" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 25,\n  \"items\": 1,\n  \"channel\": \"postman\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/api/checkout"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "10 - Dependency Metrics",
+      "description": "Target individual simulated dependencies. Add ?fail=true to record failure metrics and an error span. For Kafka, use operation=publish_event or operation=consume_event.",
+      "item": [
+        {
+          "name": "Configured dependency",
+          "request": { "method": "GET", "header": [{ "key": "x-request-id", "value": "dependency-{{$guid}}" }], "url": "{{baseUrl}}/api/dependencies/{{dependency}}" },
+          "response": []
+        },
+        {
+          "name": "PostgreSQL/Citus query",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/dependencies/postgresql_citus" },
+          "response": []
+        },
+        {
+          "name": "Kafka publish",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/dependencies/kafka?operation=publish_event" },
+          "response": []
+        },
+        {
+          "name": "Kafka consume",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/dependencies/kafka?operation=consume_event" },
+          "response": []
+        },
+        {
+          "name": "External API call",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/dependencies/external_api" },
+          "response": []
+        },
+        {
+          "name": "Redis/cache operation",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/dependencies/redis_cache" },
+          "response": []
+        },
+        {
+          "name": "File storage operation",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/dependencies/file_storage" },
+          "response": []
+        },
+        {
+          "name": "Authentication provider",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/dependencies/auth_provider" },
+          "response": []
+        },
+        {
+          "name": "External API failure",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Dependency failure returns 503', () => pm.response.to.have.status(503));"] } }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/dependencies/external_api?fail=true" },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "11 - Business, Error, and SLO Telemetry",
+      "description": "Run this folder repeatedly to populate business value, classified errors, availability, success rate, latency, error rate, throughput, and SLO panels.",
+      "item": [
+        {
+          "name": "Business checkout - web channel",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.test('Checkout succeeds', () => pm.response.to.have.status(201));"] }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "x-demo-role", "value": "customer" }],
+            "body": { "mode": "raw", "raw": "{\n  \"order_id\": \"{{$guid}}\",\n  \"amount\": 249.99,\n  \"items\": 4,\n  \"channel\": \"web\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/api/checkout"
+          },
+          "response": []
+        },
+        {
+          "name": "Latency SLO breach",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/slow?ms=1200" },
+          "response": []
+        },
+        {
+          "name": "Availability and 5xx error",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Intentional status is 500', () => pm.response.to.have.status(500));"] } }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/error" },
+          "response": []
+        },
+        {
+          "name": "Success-rate SLO breach (timeout)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Intentional status is 504', () => pm.response.to.have.status(504));"] } }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/timeout" },
+          "response": []
+        },
+        {
+          "name": "Throughput burst - hello",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/hello?name=slo" },
           "response": []
         }
       ]

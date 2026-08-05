@@ -1,0 +1,179 @@
+{
+  "annotations": { "list": [] },
+  "description": "Executive SLOs, dependency health, business telemetry, errors, and correlated application logs. This dashboard is additive to API Request Metrics.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 99 }, { "color": "green", "value": 99.9 }] },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto", "wideLayout": true },
+      "targets": [{ "editorMode": "code", "expr": "100 * (sum(rate(api_requests_total[5m])) - sum(rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)", "instant": true, "legendFormat": "Availability", "range": false, "refId": "A" }],
+      "title": "Availability",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 0, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "id": 2,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto", "wideLayout": true },
+      "targets": [{ "editorMode": "code", "expr": "sum(increase(api_requests_total[$__range]))", "instant": true, "legendFormat": "Requests", "range": false, "refId": "A" }],
+      "title": "Request volume",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 2, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 95 }, { "color": "green", "value": 99 }] }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "id": 3,
+      "options": { "colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto", "wideLayout": true },
+      "targets": [{ "editorMode": "code", "expr": "100 * sum(rate(api_requests_total{status_code!~\"4..|5..\"}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)", "instant": true, "legendFormat": "Success rate", "range": false, "refId": "A" }],
+      "title": "Success rate",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 2, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 0.1 }, { "color": "red", "value": 1 }] }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "id": 4,
+      "options": { "colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto", "wideLayout": true },
+      "targets": [{ "editorMode": "code", "expr": "100 * sum(rate(api_requests_total{status_code=~\"5..\"}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)", "instant": true, "legendFormat": "5xx error rate", "range": false, "refId": "A" }],
+      "title": "5xx error rate",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 3, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 0.5 }, { "color": "red", "value": 1 }] }, "unit": "s" }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "id": 5,
+      "options": { "colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto", "wideLayout": true },
+      "targets": [{ "editorMode": "code", "expr": "histogram_quantile(0.95, sum by (le) (rate(api_request_duration_seconds_bucket[5m])))", "instant": true, "legendFormat": "P95 latency", "range": false, "refId": "A" }],
+      "title": "P95 latency",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 2, "unit": "suffix: req/s" }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "id": 6,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto", "wideLayout": true },
+      "targets": [{ "editorMode": "code", "expr": "sum(rate(api_requests_total[5m]))", "instant": true, "legendFormat": "Throughput", "range": false, "refId": "A" }],
+      "title": "Throughput",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 0, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 4 },
+      "id": 7,
+      "options": { "displayMode": "gradient", "minVizHeight": 10, "minVizWidth": 0, "namePlacement": "auto", "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showUnfilled": true, "sizing": "auto", "valueMode": "color" },
+      "targets": [{ "editorMode": "code", "expr": "topk(5, sum by (route) (increase(api_requests_total{status_code=~\"5..\"}[$__range])))", "instant": true, "legendFormat": "{{route}}", "range": false, "refId": "A" }],
+      "title": "Top failing APIs",
+      "type": "bargauge"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 0, "mappings": [{ "options": { "0": { "color": "green", "index": 0, "text": "Available" }, "1": { "color": "red", "index": 1, "text": "Unavailable" } }, "type": "value" }], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 1 }] }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 4 },
+      "id": 8,
+      "options": { "displayMode": "lcd", "minVizHeight": 10, "minVizWidth": 0, "namePlacement": "auto", "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showUnfilled": true, "sizing": "auto", "valueMode": "color" },
+      "targets": [{ "editorMode": "code", "expr": "1 - dependency_available", "instant": true, "legendFormat": "{{dependency}}", "range": false, "refId": "A" }],
+      "title": "Dependency availability",
+      "type": "bargauge"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 0, "mappings": [{ "options": { "0": { "color": "green", "index": 0, "text": "Meeting SLO" }, "1": { "color": "red", "index": 1, "text": "Breaching SLO" } }, "type": "value" }], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 1 }] }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 4 },
+      "id": 9,
+      "options": { "colorMode": "background", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "value_and_name", "wideLayout": true },
+      "targets": [{ "editorMode": "code", "expr": "(100 * (sum(rate(api_requests_total[5m])) - sum(rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)) < bool 99.9", "instant": true, "legendFormat": "nestjs-observability-demo", "range": false, "refId": "A" }],
+      "title": "Services breaching SLOs",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "lineInterpolation": "linear", "lineWidth": 2, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "decimals": 3, "unit": "s" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 11 },
+      "id": 10,
+      "options": { "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "right", "showLegend": true }, "tooltip": { "hideZeros": false, "mode": "multi", "sort": "desc" } },
+      "targets": [{ "editorMode": "code", "expr": "histogram_quantile(0.95, sum by (le, dependency) (rate(dependency_request_duration_seconds_bucket[$__rate_interval])))", "legendFormat": "P95 {{dependency}}", "range": true, "refId": "A" }],
+      "title": "Dependency P95 latency",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "custom": { "drawStyle": "bars", "fillOpacity": 35, "lineWidth": 1, "showPoints": "never", "stacking": { "group": "A", "mode": "normal" } }, "decimals": 2, "unit": "suffix: events/s" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 12, "y": 11 },
+      "id": 11,
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "list", "placement": "bottom", "showLegend": true }, "tooltip": { "hideZeros": false, "mode": "multi", "sort": "desc" } },
+      "targets": [{ "editorMode": "code", "expr": "sum by (outcome, channel) (rate(business_transactions_total[$__rate_interval]))", "legendFormat": "{{outcome}} / {{channel}}", "range": true, "refId": "A" }],
+      "title": "Business transactions",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 2, "unit": "currency:USD" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 4, "x": 20, "y": 11 },
+      "id": 12,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto", "wideLayout": true },
+      "targets": [{ "editorMode": "code", "expr": "sum(increase(business_revenue_total[$__range]))", "instant": true, "legendFormat": "Revenue", "range": false, "refId": "A" }],
+      "title": "Business value",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "custom": { "drawStyle": "bars", "fillOpacity": 25, "lineWidth": 1, "showPoints": "never", "stacking": { "group": "A", "mode": "normal" } }, "decimals": 2, "unit": "suffix: errors/s" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 19 },
+      "id": 13,
+      "options": { "legend": { "calcs": ["lastNotNull", "sum"], "displayMode": "table", "placement": "right", "showLegend": true }, "tooltip": { "hideZeros": false, "mode": "multi", "sort": "desc" } },
+      "targets": [{ "editorMode": "code", "expr": "sum by (error_type, dependency) (rate(api_errors_total[$__rate_interval]))", "legendFormat": "{{error_type}} / {{dependency}}", "range": true, "refId": "A" }],
+      "title": "Error telemetry",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "mimir" },
+      "fieldConfig": { "defaults": { "decimals": 0, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 19 },
+      "id": 14,
+      "options": { "displayMode": "gradient", "minVizHeight": 10, "minVizWidth": 0, "namePlacement": "auto", "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showUnfilled": true, "sizing": "auto", "valueMode": "color" },
+      "targets": [{ "editorMode": "code", "expr": "sum by (indicator, route) (increase(api_slo_breaches_total[$__range]))", "instant": true, "legendFormat": "{{indicator}}: {{route}}", "range": false, "refId": "A" }],
+      "title": "SLO breaches",
+      "type": "bargauge"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 27 },
+      "id": 15,
+      "options": { "dedupStrategy": "none", "enableInfiniteScrolling": false, "enableLogDetails": true, "prettifyLogMessage": true, "showCommonLabels": false, "showLabels": false, "showTime": true, "sortOrder": "Descending", "wrapLogMessage": true },
+      "targets": [{ "editorMode": "code", "expr": "{service_name=\"nestjs-observability-demo\"} | json", "queryType": "range", "refId": "A" }],
+      "title": "Structured application logs — click TraceID to open Tempo",
+      "type": "logs"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 42,
+  "tags": ["nestjs", "observability", "slo", "tempo", "loki", "mimir"],
+  "templating": { "list": [] },
+  "time": { "from": "now-15m", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "API Executive & Telemetry Overview",
+  "uid": "api-executive-telemetry",
+  "version": 1,
+  "weekStart": ""
+}

@@ -10,6 +10,11 @@ datasources:
     editable: true
     jsonData:
       maxLines: 1000
+      derivedFields:
+        - name: TraceID
+          matcherRegex: '"trace_id":"([a-f0-9]+)"'
+          datasourceUid: tempo
+          url: '$${__value.raw}'
 
   - name: Mimir
     type: prometheus
@@ -22,6 +27,29 @@ datasources:
       httpMethod: POST
       prometheusType: Mimir
       prometheusVersion: 2.9.1
+
+
+  - name: Tempo
+    type: tempo
+    access: proxy
+    uid: tempo
+    url: http://tempo:3200
+    isDefault: false
+    editable: true
+    jsonData:
+      httpMethod: GET
+      nodeGraph:
+        enabled: true
+      search:
+        hide: false
+      tracesToLogsV2:
+        datasourceUid: loki
+        spanStartTimeShift: -5m
+        spanEndTimeShift: 5m
+        filterByTraceID: true
+        filterBySpanID: false
+      tracesToMetrics:
+        datasourceUid: mimir
 
   - name: TestData
     type: testdata
