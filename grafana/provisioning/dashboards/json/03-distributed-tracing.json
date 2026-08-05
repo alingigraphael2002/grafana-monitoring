@@ -1,0 +1,1901 @@
+{
+    "annotations":  {
+                        "list":  [
+
+                                 ]
+                    },
+    "description":  "Tab: Distributed Tracing — API gateway, auth/authorisation, application logic, DB, Kafka, external API, cache, file storage.",
+    "editable":  true,
+    "fiscalYearStartMonth":  0,
+    "graphTooltip":  1,
+    "id":  null,
+    "links":  [
+                  {
+                      "url":  "/d/tab-api-request-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Request Metrics",
+                      "includeVars":  true,
+                      "tooltip":  "API Request Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-error-telemetry",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Error Telemetry",
+                      "includeVars":  true,
+                      "tooltip":  "Error Telemetry"
+                  },
+                  {
+                      "url":  "/d/tab-distributed-tracing",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Distributed Tracing",
+                      "includeVars":  true,
+                      "tooltip":  "Distributed Tracing"
+                  },
+                  {
+                      "url":  "/d/tab-dependency-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Dependency Metrics",
+                      "includeVars":  true,
+                      "tooltip":  "Dependency Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-business-telemetry",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Business Telemetry",
+                      "includeVars":  true,
+                      "tooltip":  "Business Telemetry"
+                  },
+                  {
+                      "url":  "/d/tab-api-slo-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Availability and SLO",
+                      "includeVars":  true,
+                      "tooltip":  "API Availability and SLO Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-structured-logs",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Structured Application Logs",
+                      "includeVars":  true,
+                      "tooltip":  "Structured Application Logs"
+                  },
+                  {
+                      "url":  "/d/tab-executive-overview",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Executive Overview",
+                      "includeVars":  true,
+                      "tooltip":  "API Executive Overview"
+                  }
+              ],
+    "liveNow":  true,
+    "panels":  [
+                   {
+                       "id":  1,
+                       "gridPos":  {
+                                       "y":  0,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  6
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "Checkout / stage traces (logs with trace_id)",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=~\"operation_.*|business_transaction|request_completed\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "Click TraceID to open Tempo. Generate traffic with POST /api/checkout.",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  10,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "API gateway",
+                       "gridPos":  {
+                                       "y":  6,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "id":  11,
+                       "gridPos":  {
+                                       "y":  7,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  5
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "API gateway stage events",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | stage=\"api_gateway\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "Span/stage events for this checkout step",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  12,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Authentication and authorisation",
+                       "gridPos":  {
+                                       "y":  12,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  13,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Authentication and authorisation success",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"auth_provider\",outcome=\"success\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Authentication and authorisation success",
+                       "gridPos":  {
+                                       "y":  13,
+                                       "w":  4,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  14,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Authentication and authorisation failure",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"auth_provider\",outcome=\"failure\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Authentication and authorisation failure",
+                       "gridPos":  {
+                                       "y":  13,
+                                       "w":  4,
+                                       "x":  4,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  15,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "P95 latency",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(dependency_request_duration_seconds_bucket{dependency=\"auth_provider\"}[5m])))",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "P95 latency",
+                       "gridPos":  {
+                                       "y":  13,
+                                       "w":  4,
+                                       "x":  8,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  16,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{operation}} {{outcome}}",
+                                           "expr":  "sum by (operation, outcome) (rate(dependency_requests_total{dependency=\"auth_provider\"}[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Ops rate",
+                       "gridPos":  {
+                                       "y":  13,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "id":  17,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Application logic",
+                       "gridPos":  {
+                                       "y":  18,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "id":  18,
+                       "gridPos":  {
+                                       "y":  19,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  5
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "Application logic stage events",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | stage=\"application_logic\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "Span/stage events for this checkout step",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  19,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Database query",
+                       "gridPos":  {
+                                       "y":  24,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  20,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Database query success",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"postgresql_citus\",outcome=\"success\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Database query success",
+                       "gridPos":  {
+                                       "y":  25,
+                                       "w":  4,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  21,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Database query failure",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"postgresql_citus\",outcome=\"failure\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Database query failure",
+                       "gridPos":  {
+                                       "y":  25,
+                                       "w":  4,
+                                       "x":  4,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  22,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "P95 latency",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(dependency_request_duration_seconds_bucket{dependency=\"postgresql_citus\"}[5m])))",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "P95 latency",
+                       "gridPos":  {
+                                       "y":  25,
+                                       "w":  4,
+                                       "x":  8,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  23,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{operation}} {{outcome}}",
+                                           "expr":  "sum by (operation, outcome) (rate(dependency_requests_total{dependency=\"postgresql_citus\"}[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Ops rate",
+                       "gridPos":  {
+                                       "y":  25,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "id":  24,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Kafka publish or consume",
+                       "gridPos":  {
+                                       "y":  30,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  25,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Kafka publish or consume success",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"kafka\",outcome=\"success\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Kafka publish or consume success",
+                       "gridPos":  {
+                                       "y":  31,
+                                       "w":  4,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  26,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Kafka publish or consume failure",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"kafka\",outcome=\"failure\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Kafka publish or consume failure",
+                       "gridPos":  {
+                                       "y":  31,
+                                       "w":  4,
+                                       "x":  4,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  27,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "P95 latency",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(dependency_request_duration_seconds_bucket{dependency=\"kafka\"}[5m])))",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "P95 latency",
+                       "gridPos":  {
+                                       "y":  31,
+                                       "w":  4,
+                                       "x":  8,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  28,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{operation}} {{outcome}}",
+                                           "expr":  "sum by (operation, outcome) (rate(dependency_requests_total{dependency=\"kafka\"}[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Ops rate",
+                       "gridPos":  {
+                                       "y":  31,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "id":  29,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "External API call",
+                       "gridPos":  {
+                                       "y":  36,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  30,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "External API call success",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"external_api\",outcome=\"success\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "External API call success",
+                       "gridPos":  {
+                                       "y":  37,
+                                       "w":  4,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  31,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "External API call failure",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"external_api\",outcome=\"failure\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "External API call failure",
+                       "gridPos":  {
+                                       "y":  37,
+                                       "w":  4,
+                                       "x":  4,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  32,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "P95 latency",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(dependency_request_duration_seconds_bucket{dependency=\"external_api\"}[5m])))",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "P95 latency",
+                       "gridPos":  {
+                                       "y":  37,
+                                       "w":  4,
+                                       "x":  8,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  33,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{operation}} {{outcome}}",
+                                           "expr":  "sum by (operation, outcome) (rate(dependency_requests_total{dependency=\"external_api\"}[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Ops rate",
+                       "gridPos":  {
+                                       "y":  37,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "id":  34,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Cache operation",
+                       "gridPos":  {
+                                       "y":  42,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  35,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Cache operation success",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"redis_cache\",outcome=\"success\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Cache operation success",
+                       "gridPos":  {
+                                       "y":  43,
+                                       "w":  4,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  36,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Cache operation failure",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"redis_cache\",outcome=\"failure\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Cache operation failure",
+                       "gridPos":  {
+                                       "y":  43,
+                                       "w":  4,
+                                       "x":  4,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  37,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "P95 latency",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(dependency_request_duration_seconds_bucket{dependency=\"redis_cache\"}[5m])))",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "P95 latency",
+                       "gridPos":  {
+                                       "y":  43,
+                                       "w":  4,
+                                       "x":  8,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  38,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{operation}} {{outcome}}",
+                                           "expr":  "sum by (operation, outcome) (rate(dependency_requests_total{dependency=\"redis_cache\"}[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Ops rate",
+                       "gridPos":  {
+                                       "y":  43,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "id":  39,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "File storage operation",
+                       "gridPos":  {
+                                       "y":  48,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  40,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "File storage operation success",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"file_storage\",outcome=\"success\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "File storage operation success",
+                       "gridPos":  {
+                                       "y":  49,
+                                       "w":  4,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  41,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "File storage operation failure",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(dependency_requests_total{dependency=\"file_storage\",outcome=\"failure\"}[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "File storage operation failure",
+                       "gridPos":  {
+                                       "y":  49,
+                                       "w":  4,
+                                       "x":  4,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  42,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "P95 latency",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(dependency_request_duration_seconds_bucket{dependency=\"file_storage\"}[5m])))",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "P95 latency",
+                       "gridPos":  {
+                                       "y":  49,
+                                       "w":  4,
+                                       "x":  8,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  43,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{operation}} {{outcome}}",
+                                           "expr":  "sum by (operation, outcome) (rate(dependency_requests_total{dependency=\"file_storage\"}[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Ops rate",
+                       "gridPos":  {
+                                       "y":  49,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "id":  200,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Authorisation (internal)",
+                       "gridPos":  {
+                                       "y":  54,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "id":  201,
+                       "gridPos":  {
+                                       "y":  55,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  5
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "Authorisation stage events",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | stage=\"authorization\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "authorization.authorize_checkout spans/logs",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   }
+               ],
+    "refresh":  "5s",
+    "schemaVersion":  42,
+    "tags":  [
+                 "nestjs",
+                 "observability",
+                 "tabs",
+                 "tracing"
+             ],
+    "templating":  {
+                       "list":  [
+
+                                ]
+                   },
+    "time":  {
+                 "to":  "now",
+                 "from":  "now-15m"
+             },
+    "timepicker":  {
+
+                   },
+    "timezone":  "browser",
+    "title":  "Distributed Tracing",
+    "uid":  "tab-distributed-tracing",
+    "version":  1,
+    "weekStart":  ""
+}

@@ -1,0 +1,1283 @@
+{
+    "annotations":  {
+                        "list":  [
+
+                                 ]
+                    },
+    "description":  "Tab: API Request Metrics — request count, duration, status, active, size, timeouts, retries, rate limits.",
+    "editable":  true,
+    "fiscalYearStartMonth":  0,
+    "graphTooltip":  1,
+    "id":  null,
+    "links":  [
+                  {
+                      "url":  "/d/tab-api-request-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Request Metrics",
+                      "includeVars":  true,
+                      "tooltip":  "API Request Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-error-telemetry",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Error Telemetry",
+                      "includeVars":  true,
+                      "tooltip":  "Error Telemetry"
+                  },
+                  {
+                      "url":  "/d/tab-distributed-tracing",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Distributed Tracing",
+                      "includeVars":  true,
+                      "tooltip":  "Distributed Tracing"
+                  },
+                  {
+                      "url":  "/d/tab-dependency-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Dependency Metrics",
+                      "includeVars":  true,
+                      "tooltip":  "Dependency Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-business-telemetry",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Business Telemetry",
+                      "includeVars":  true,
+                      "tooltip":  "Business Telemetry"
+                  },
+                  {
+                      "url":  "/d/tab-api-slo-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Availability and SLO",
+                      "includeVars":  true,
+                      "tooltip":  "API Availability and SLO Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-structured-logs",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Structured Application Logs",
+                      "includeVars":  true,
+                      "tooltip":  "Structured Application Logs"
+                  },
+                  {
+                      "url":  "/d/tab-executive-overview",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Executive Overview",
+                      "includeVars":  true,
+                      "tooltip":  "API Executive Overview"
+                  }
+              ],
+    "liveNow":  true,
+    "panels":  [
+                   {
+                       "id":  100,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Request count",
+                       "gridPos":  {
+                                       "y":  0,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "Total HTTP requests in range",
+                       "type":  "stat",
+                       "id":  1,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Request count",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(api_requests_total[$__range]))",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Request count",
+                       "gridPos":  {
+                                       "y":  1,
+                                       "w":  6,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  2,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "line",
+                                                                           "stacking":  {
+                                                                                            "mode":  "none",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{route}}",
+                                           "expr":  "sum by (route) (rate(api_requests_total[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Request rate by route",
+                       "gridPos":  {
+                                       "y":  1,
+                                       "w":  18,
+                                       "x":  6,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "id":  110,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Request duration",
+                       "gridPos":  {
+                                       "y":  5,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "P95 latency",
+                       "type":  "stat",
+                       "id":  3,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "green"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  0.5,
+                                                                                                 "color":  "yellow"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  1,
+                                                                                                 "color":  "red"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "P95 duration",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(api_request_duration_seconds_bucket[5m])))",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "P95 duration",
+                       "gridPos":  {
+                                       "y":  6,
+                                       "w":  6,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  4,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "line",
+                                                                           "stacking":  {
+                                                                                            "mode":  "none",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "P50 {{route}}",
+                                           "expr":  "histogram_quantile(0.50, sum by (le, route) (rate(api_request_duration_seconds_bucket[$__rate_interval])))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       },
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "P95 {{route}}",
+                                           "expr":  "histogram_quantile(0.95, sum by (le, route) (rate(api_request_duration_seconds_bucket[$__rate_interval])))",
+                                           "refId":  "B",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Duration percentiles by route",
+                       "gridPos":  {
+                                       "y":  6,
+                                       "w":  18,
+                                       "x":  6,
+                                       "h":  8
+                                   }
+                   },
+                   {
+                       "id":  120,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Response status",
+                       "gridPos":  {
+                                       "y":  14,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  5,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  2,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "red"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  95,
+                                                                                                 "color":  "yellow"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  99,
+                                                                                                 "color":  "green"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "percent"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Success rate",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "100 * sum(rate(api_requests_total{status_code!~\"4..|5..\"}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Success rate",
+                       "gridPos":  {
+                                       "y":  15,
+                                       "w":  6,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  6,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{status_code}}",
+                                           "expr":  "sum by (status_code) (rate(api_requests_total[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Status code rate",
+                       "gridPos":  {
+                                       "y":  15,
+                                       "w":  18,
+                                       "x":  6,
+                                       "h":  8
+                                   }
+                   },
+                   {
+                       "id":  130,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Active requests",
+                       "gridPos":  {
+                                       "y":  23,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  7,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Active requests",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "api_active_requests",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Active requests",
+                       "gridPos":  {
+                                       "y":  24,
+                                       "w":  6,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  8,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "line",
+                                                                           "stacking":  {
+                                                                                            "mode":  "none",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "active",
+                                           "expr":  "api_active_requests",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Active requests over time",
+                       "gridPos":  {
+                                       "y":  24,
+                                       "w":  18,
+                                       "x":  6,
+                                       "h":  6
+                                   }
+                   },
+                   {
+                       "id":  140,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Request / response size",
+                       "gridPos":  {
+                                       "y":  30,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  9,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "Bps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{route}}",
+                                           "expr":  "sum by (route) (rate(api_request_size_bytes_sum[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Request size throughput",
+                       "gridPos":  {
+                                       "y":  31,
+                                       "w":  12,
+                                       "x":  0,
+                                       "h":  7
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  10,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "Bps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{route}}",
+                                           "expr":  "sum by (route) (rate(api_response_size_bytes_sum[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Response size throughput",
+                       "gridPos":  {
+                                       "y":  31,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  7
+                                   }
+                   },
+                   {
+                       "id":  150,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Timeout count",
+                       "gridPos":  {
+                                       "y":  38,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  11,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Timeout count",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(api_request_timeouts_total[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Timeout count",
+                       "gridPos":  {
+                                       "y":  39,
+                                       "w":  6,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  12,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{route}}",
+                                           "expr":  "sum by (route) (rate(api_request_timeouts_total[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Timeout rate",
+                       "gridPos":  {
+                                       "y":  39,
+                                       "w":  18,
+                                       "x":  6,
+                                       "h":  6
+                                   }
+                   },
+                   {
+                       "id":  160,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Retry count",
+                       "gridPos":  {
+                                       "y":  45,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  13,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Retry count",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(api_request_retries_total[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Retry count",
+                       "gridPos":  {
+                                       "y":  46,
+                                       "w":  6,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  14,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{operation}}",
+                                           "expr":  "sum by (operation) (rate(api_request_retries_total[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Retry rate",
+                       "gridPos":  {
+                                       "y":  46,
+                                       "w":  18,
+                                       "x":  6,
+                                       "h":  6
+                                   }
+                   },
+                   {
+                       "id":  170,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Rate-limit count",
+                       "gridPos":  {
+                                       "y":  52,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true,
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "colorMode":  "background"
+                                   },
+                       "description":  "",
+                       "type":  "stat",
+                       "id":  15,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "blue"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Rate-limit count",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "sum(increase(api_rate_limit_hits_total[$__range])) or vector(0)",
+                                           "refId":  "A",
+                                           "range":  false
+                                       }
+                                   ],
+                       "title":  "Rate-limit count",
+                       "gridPos":  {
+                                       "y":  53,
+                                       "w":  6,
+                                       "x":  0,
+                                       "h":  4
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "",
+                       "type":  "timeseries",
+                       "id":  16,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "bars",
+                                                                           "stacking":  {
+                                                                                            "mode":  "normal",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{route}}",
+                                           "expr":  "sum by (route) (rate(api_rate_limit_hits_total[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Rate-limit hit rate",
+                       "gridPos":  {
+                                       "y":  53,
+                                       "w":  18,
+                                       "x":  6,
+                                       "h":  6
+                                   }
+                   }
+               ],
+    "refresh":  "5s",
+    "schemaVersion":  42,
+    "tags":  [
+                 "nestjs",
+                 "observability",
+                 "tabs",
+                 "api-request-metrics"
+             ],
+    "templating":  {
+                       "list":  [
+
+                                ]
+                   },
+    "time":  {
+                 "to":  "now",
+                 "from":  "now-15m"
+             },
+    "timepicker":  {
+
+                   },
+    "timezone":  "browser",
+    "title":  "API Request Metrics",
+    "uid":  "tab-api-request-metrics",
+    "version":  1,
+    "weekStart":  ""
+}

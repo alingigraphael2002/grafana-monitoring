@@ -1,0 +1,300 @@
+{
+    "annotations":  {
+                        "list":  [
+
+                                 ]
+                    },
+    "description":  "Tab: Structured JSON logging for application events, requests, operations, and errors.",
+    "editable":  true,
+    "fiscalYearStartMonth":  0,
+    "graphTooltip":  1,
+    "id":  null,
+    "links":  [
+                  {
+                      "url":  "/d/tab-api-request-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Request Metrics",
+                      "includeVars":  true,
+                      "tooltip":  "API Request Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-error-telemetry",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Error Telemetry",
+                      "includeVars":  true,
+                      "tooltip":  "Error Telemetry"
+                  },
+                  {
+                      "url":  "/d/tab-distributed-tracing",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Distributed Tracing",
+                      "includeVars":  true,
+                      "tooltip":  "Distributed Tracing"
+                  },
+                  {
+                      "url":  "/d/tab-dependency-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Dependency Metrics",
+                      "includeVars":  true,
+                      "tooltip":  "Dependency Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-business-telemetry",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Business Telemetry",
+                      "includeVars":  true,
+                      "tooltip":  "Business Telemetry"
+                  },
+                  {
+                      "url":  "/d/tab-api-slo-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Availability and SLO",
+                      "includeVars":  true,
+                      "tooltip":  "API Availability and SLO Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-structured-logs",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Structured Application Logs",
+                      "includeVars":  true,
+                      "tooltip":  "Structured Application Logs"
+                  },
+                  {
+                      "url":  "/d/tab-executive-overview",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Executive Overview",
+                      "includeVars":  true,
+                      "tooltip":  "API Executive Overview"
+                  }
+              ],
+    "liveNow":  true,
+    "panels":  [
+                   {
+                       "id":  1,
+                       "gridPos":  {
+                                       "y":  0,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  10
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "All structured JSON logs",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "One JSON object per line. Click TraceID to open Tempo.",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  2,
+                       "gridPos":  {
+                                       "y":  10,
+                                       "w":  12,
+                                       "x":  0,
+                                       "h":  8
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "Application logs",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=\"application_log\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  3,
+                       "gridPos":  {
+                                       "y":  10,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  8
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "Request events",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=~\"request_.*\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  4,
+                       "gridPos":  {
+                                       "y":  18,
+                                       "w":  12,
+                                       "x":  0,
+                                       "h":  8
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "Operation events",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=~\"operation_.*\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  5,
+                       "gridPos":  {
+                                       "y":  18,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  8
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "Errors only",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | level=\"error\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   }
+               ],
+    "refresh":  "5s",
+    "schemaVersion":  42,
+    "tags":  [
+                 "nestjs",
+                 "observability",
+                 "tabs",
+                 "logs"
+             ],
+    "templating":  {
+                       "list":  [
+
+                                ]
+                   },
+    "time":  {
+                 "to":  "now",
+                 "from":  "now-15m"
+             },
+    "timepicker":  {
+
+                   },
+    "timezone":  "browser",
+    "title":  "Structured Application Logs",
+    "uid":  "tab-structured-logs",
+    "version":  1,
+    "weekStart":  ""
+}

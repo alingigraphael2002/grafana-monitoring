@@ -101,10 +101,32 @@ Select **Local NestJS Demo**, then run folders **09–11** to populate tracing, 
 
 ## Grafana
 
-Provisioned dashboards under **Observability**:
+Dashboards are **auto-provisioned** from:
 
-- **API Request Metrics** — request volume, latency, sizes, timeouts, retries, rate limits
-- **API Executive & Telemetry Overview** — availability, success rate, 5xx, P95, top failing APIs, dependency health, business telemetry, errors, SLO breaches, structured logs
+| Purpose | Path |
+|---------|------|
+| Datasources (Mimir / Loki / Tempo) | `grafana/provisioning/datasources/datasources.yml` |
+| Dashboard loader | `grafana/provisioning/dashboards/dashboards.yml` |
+| Tab dashboards + PromQL/LogQL | `grafana/provisioning/dashboards/json/*.json` |
+
+Open any dashboard under **Observability**. The top link bar is the **tab navigation**:
+
+1. **API Request Metrics** — request count, duration, status, active, size, timeouts, retries, rate limits  
+2. **Error Telemetry** — classified errors and failure logs  
+3. **Distributed Tracing** — gateway, auth/authorisation, app logic, DB, Kafka, external API, cache, file storage  
+4. **Dependency Metrics** — PostgreSQL/Citus, Kafka, External APIs, Redis, file storage, auth provider  
+5. **Business Telemetry** — transactions, revenue, items  
+6. **API Availability and SLO** — availability, success rate, latency, error rate, throughput  
+7. **Structured Application Logs** — JSON application events  
+8. **API Executive Overview** — availability, volume, success rate, 5xx, P95, top failing APIs, SLO breaches  
+
+After editing JSON, wait ~10s or run `docker compose restart grafana`.
+
+Regenerate all tab dashboards:
+
+```powershell
+powershell -File grafana/provisioning/dashboards/generate-tab-dashboards.ps1
+```
 
 ### Logs
 
