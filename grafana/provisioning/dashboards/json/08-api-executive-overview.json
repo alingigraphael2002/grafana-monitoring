@@ -4,7 +4,7 @@
 
                                  ]
                     },
-    "description":  "Tab: Executive view — availability, volume, success rate, 5xx, P95, top failing APIs, SLO breaches.",
+    "description":  "Tab: Executive view — availability, volume, success rate, 5xx, P95, top failing APIs, and service-level SLO status.",
     "editable":  true,
     "fiscalYearStartMonth":  0,
     "graphTooltip":  1,
@@ -488,7 +488,7 @@
                                            "legendFormat":  "Services breaching SLOs",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "(100 * (sum(rate(api_requests_total[5m])) - sum(rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)) \u003c bool 99.9",
+                                           "expr":  "count(count by (service) (label_replace((100 * (sum by (service) (rate(api_requests_total[5m])) - sum by (service) (rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99.9, \"slo\", \"availability\", \"service\", \".*\") or label_replace((100 * sum by (service) (rate(api_requests_total{status_code!~\"4..|5..\"}[5m])) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99, \"slo\", \"success_rate\", \"service\", \".*\") or label_replace(histogram_quantile(0.95, sum by (service, le) (rate(api_request_duration_seconds_bucket[5m]))) \u003e 0.5, \"slo\", \"p95_latency\", \"service\", \".*\"))) or vector(0)",
                                            "refId":  "A",
                                            "range":  false
                                        }
@@ -598,10 +598,10 @@
                        "title":  "Services breaching SLOs",
                        "targets":  [
                                        {
-                                           "legendFormat":  "nestjs-observability-demo",
+                                           "legendFormat":  "{{service}} — {{slo}}",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "(100 * (sum(rate(api_requests_total[5m])) - sum(rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)) \u003c bool 99.9",
+                                           "expr":  "label_replace((100 * (sum by (service) (rate(api_requests_total[5m])) - sum by (service) (rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99.9, \"slo\", \"availability\", \"service\", \".*\") or label_replace((100 * sum by (service) (rate(api_requests_total{status_code!~\"4..|5..\"}[5m])) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99, \"slo\", \"success_rate\", \"service\", \".*\") or label_replace(histogram_quantile(0.95, sum by (service, le) (rate(api_request_duration_seconds_bucket[5m]))) \u003e 0.5, \"slo\", \"p95_latency\", \"service\", \".*\")",
                                            "refId":  "A",
                                            "range":  false
                                        }

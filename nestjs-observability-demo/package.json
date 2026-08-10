@@ -4,8 +4,10 @@
   "private": true,
   "description": "Small NestJS API for testing Grafana Loki and Mimir",
   "license": "UNLICENSED",
+  "packageManager": "pnpm@10.15.1",
   "scripts": {
     "build": "nest build",
+    "test": "npm run build && node --test test/*.test.js",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main.js",

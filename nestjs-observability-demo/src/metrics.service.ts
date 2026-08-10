@@ -119,9 +119,9 @@ export class MetricsService {
     registers: [this.registry],
   });
 
-  readonly sloBreaches = new Counter({
-    name: 'api_slo_breaches_total',
-    help: 'API SLO breaches by indicator and route',
+  readonly sliViolations = new Counter({
+    name: 'api_sli_violations_total',
+    help: 'Request-level SLI violations by indicator and route',
     labelNames: ['indicator', 'route'] as const,
     registers: [this.registry],
   });

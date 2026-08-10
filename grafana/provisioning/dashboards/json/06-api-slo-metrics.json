@@ -4,7 +4,7 @@
 
                                  ]
                     },
-    "description":  "Tab: Availability, success rate, latency, error rate, throughput, and SLO breaches.",
+    "description":  "Tab: Availability, success rate, latency, error rate, throughput, and request-level SLI violations.",
     "editable":  true,
     "fiscalYearStartMonth":  0,
     "graphTooltip":  1,
@@ -913,7 +913,7 @@
                        "panels":  [
 
                                   ],
-                       "title":  "SLO breaches",
+                       "title":  "Request-level SLI violations",
                        "gridPos":  {
                                        "y":  44,
                                        "w":  24,
@@ -954,13 +954,13 @@
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
-                       "title":  "SLO breaches by indicator / route",
+                       "title":  "SLI violations by indicator / route",
                        "targets":  [
                                        {
                                            "legendFormat":  "{{indicator}}: {{route}}",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "sum by (indicator, route) (increase(api_slo_breaches_total[$__range]))",
+                                           "expr":  "sum by (indicator, route) (increase(api_sli_violations_total[$__range]))",
                                            "refId":  "A",
                                            "range":  false
                                        }

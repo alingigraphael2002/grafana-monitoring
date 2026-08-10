@@ -219,6 +219,7 @@
             "listen": "test",
             "script": { "exec": [
               "pm.test('Checkout succeeds', () => pm.response.to.have.status(201));",
+              "pm.test('Amount precision is preserved', () => pm.expect(pm.response.json().amount).to.eql(149.95));",
               "pm.test('Trace ID returned', () => pm.expect(pm.response.json().trace_id).to.be.a('string'));"
             ] }
           }],

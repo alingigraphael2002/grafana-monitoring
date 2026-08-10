@@ -123,13 +123,6 @@ export class TelemetryService {
             this.metrics.dependencyRequests.inc({ dependency, operation, outcome: 'failure' });
             this.metrics.dependencyAvailability.set({ dependency }, 0);
           }
-          this.metrics.errors.inc({
-            error_type: dependency ? 'dependency' : 'application',
-            operation,
-            dependency: dependency ?? 'none',
-            status_code: '500',
-          });
-
           writeTelemetryLog('error', 'operation_failed', {
             stage,
             operation,

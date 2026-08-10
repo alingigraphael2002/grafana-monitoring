@@ -2,7 +2,7 @@
 
 Demo NestJS API that emits Prometheus metrics, structured JSON logs, and OpenTelemetry traces for the local Grafana lab (Mimir, Loki, Tempo via Alloy).
 
-Dependencies such as PostgreSQL/Citus, Kafka, Redis, external APIs, file storage, and the auth provider are **simulated** so you can exercise spans and metrics without running those systems.
+Dependencies such as PostgreSQL/Citus, Kafka, Redis, external APIs, file storage, and the auth provider are **simulated** so you can exercise spans and metrics without running those systems. These spans validate trace shape and correlation, not real network propagation or dependency connectivity.
 
 ## Requirements
 
@@ -75,7 +75,17 @@ Folders **01–08** feed API Request Metrics. Folders **09–11** cover distribu
 - **Errors:** `api_errors_total`
 - **Dependencies:** `dependency_requests_total`, `dependency_request_duration_seconds`, `dependency_available`
 - **Business:** `business_transactions_total`, `business_revenue_total`, `business_items_total`
-- **SLOs:** `api_slo_target`, `api_slo_breaches_total`
+- **SLOs:** `api_slo_target`, `api_sli_violations_total`
+
+The `/metrics` and `/health` endpoints are excluded from API request metrics so Prometheus scrapes and health probes do not distort API SLIs.
+
+## Verify
+
+```powershell
+pnpm test
+```
+
+The automated tests build the application and cover decimal business values, bounded integer inputs, monitoring-endpoint exclusion, and request URL logging.
 
 ## Structured logs
 

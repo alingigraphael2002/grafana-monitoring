@@ -9,7 +9,7 @@ This local-only stack demonstrates metrics, structured logs, and distributed tra
 - NestJS OpenTelemetry traces -> Alloy OTLP -> Tempo
 - Grafana reads Mimir, Loki, and Tempo
 
-The PostgreSQL/Citus, Kafka, external API, Redis, file storage, and authentication-provider operations are deterministic simulations. They produce realistic spans, metrics, and logs without requiring those products locally.
+The PostgreSQL/Citus, Kafka, external API, Redis, file storage, and authentication-provider operations are deterministic simulations. They produce realistic spans, metrics, and logs without requiring those products locally. They validate observability structure and trace correlation, but they do not validate real dependency connectivity or cross-service context propagation.
 
 ## Start the stack
 
@@ -118,7 +118,7 @@ Open any dashboard under **Observability**. The top link bar is the **tab naviga
 5. **Business Telemetry** — transactions, revenue, items  
 6. **API Availability and SLO** — availability, success rate, latency, error rate, throughput  
 7. **Structured Application Logs** — JSON application events  
-8. **API Executive Overview** — availability, volume, success rate, 5xx, P95, top failing APIs, SLO breaches  
+8. **API Executive Overview** — availability, volume, success rate, 5xx, P95, top failing APIs, services breaching SLOs
 
 After editing JSON, wait ~10s or run `docker compose restart grafana`.
 
@@ -160,7 +160,7 @@ The checkout trace includes gateway, authentication, authorisation, application 
 - Errors: `api_errors_total`
 - Dependencies: `dependency_requests_total`, `dependency_request_duration_seconds`, `dependency_available`
 - Business: `business_transactions_total`, `business_revenue_total`, `business_items_total`
-- SLOs: `api_slo_target`, `api_slo_breaches_total`
+- SLOs: `api_slo_target`, `api_sli_violations_total`
 
 Example dependency P95:
 
@@ -188,4 +188,10 @@ sum by (error_type, dependency) (
 - P95 latency target: 0.5 seconds
 - Throughput: request rate calculated from `api_requests_total`
 
-The demo records an SLO breach event for failed requests and requests slower than 0.5 seconds. Dashboard percentages are calculated from the original request counters.
+The demo records request-level SLI violation events for failed requests and requests slower than 0.5 seconds. The executive dashboard evaluates rolling five-minute availability, success-rate, and P95-latency SLO breaches by service. `/metrics` and `/health` are excluded from API request metrics so monitoring traffic does not distort these calculations.
+
+## Local durability and scope
+
+Grafana, Loki, Mimir, and Tempo use named Docker volumes, so their local data survives container recreation. The API and Grafana services expose Compose health checks.
+
+Timeout, retry, and rate-limit counters are explicit demo instrumentation on their corresponding endpoints. Real applications should increment those counters in shared HTTP clients, retry policies, and rate-limit middleware. The dependency spans in this lab are simulations; replace them with instrumented client libraries when connecting real infrastructure.

@@ -8,6 +8,11 @@ export class RequestObservabilityMiddleware implements NestMiddleware {
   constructor(private readonly metrics: MetricsService) {}
 
   use(req: Request, res: Response, next: NextFunction): void {
+    if (this.isMonitoringEndpoint(req)) {
+      next();
+      return;
+    }
+
     const startedAt = process.hrtime.bigint();
     const requestId = String(req.headers['x-request-id'] ?? crypto.randomUUID());
     res.setHeader('x-request-id', requestId);
@@ -16,7 +21,7 @@ export class RequestObservabilityMiddleware implements NestMiddleware {
     writeTelemetryLog('info', 'request_started', {
       request_id: requestId,
       method: req.method,
-      path: req.path,
+      path: req.originalUrl || req.url,
     });
 
     res.on('finish', () => {
@@ -45,13 +50,13 @@ export class RequestObservabilityMiddleware implements NestMiddleware {
           dependency: 'none',
           status_code: statusCode,
         });
-        this.metrics.sloBreaches.inc({ indicator: 'success_rate', route });
+        this.metrics.sliViolations.inc({ indicator: 'success_rate', route });
       }
       if (res.statusCode >= 500) {
-        this.metrics.sloBreaches.inc({ indicator: 'availability', route });
+        this.metrics.sliViolations.inc({ indicator: 'availability', route });
       }
       if (elapsedSeconds > 0.5) {
-        this.metrics.sloBreaches.inc({ indicator: 'p95_latency_seconds', route });
+        this.metrics.sliViolations.inc({ indicator: 'latency_seconds', route });
       }
 
       writeTelemetryLog(
@@ -80,6 +85,11 @@ export class RequestObservabilityMiddleware implements NestMiddleware {
     return req.path
       .replace(/\/[0-9]+(?=\/|$)/g, '/:id')
       .replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
+  }
+
+  private isMonitoringEndpoint(req: Request): boolean {
+    const pathname = (req.originalUrl || req.url || req.path).split('?')[0];
+    return pathname === '/metrics' || pathname === '/health';
   }
 
   private errorType(statusCode: number): string {

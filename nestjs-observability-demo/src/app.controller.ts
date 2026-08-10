@@ -25,6 +25,7 @@ import {
   TelemetryService,
 } from './telemetry.service';
 import { currentTraceContext } from './telemetry-log';
+import { boundedDecimal, boundedInteger } from './numeric-utils';
 
 const sleep = (milliseconds: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
@@ -105,7 +106,7 @@ export class AppController {
 
   @Get('api/slow')
   async slow(@Query('ms') milliseconds = '1000') {
-    const delay = this.safeNumber(milliseconds, 1_000, 10_000);
+    const delay = boundedInteger(milliseconds, 1_000, 10_000);
     this.logger.warn(`Simulating a slow request lasting ${delay}ms`);
     await sleep(delay);
     return { message: 'Slow request completed', delay_ms: delay };
@@ -121,7 +122,7 @@ export class AppController {
 
   @Get('api/retry')
   async retry(@Query('failures') failuresValue = '2') {
-    const failures = this.safeNumber(failuresValue, 2, 5);
+    const failures = boundedInteger(failuresValue, 2, 5);
     for (let attempt = 1; attempt <= failures; attempt += 1) {
       this.metrics.retries.inc({ operation: 'demo_upstream_call' });
       this.logger.warn(`Upstream attempt ${attempt} failed; retrying`);
@@ -194,8 +195,8 @@ export class AppController {
   @HttpCode(HttpStatus.CREATED)
   async checkout(@Body() body: CheckoutRequest, @Req() req: Request) {
     const orderId = body.order_id ?? crypto.randomUUID();
-    const amount = this.safeNumber(String(body.amount ?? 99.99), 99.99, 1_000_000);
-    const items = Math.max(1, this.safeNumber(String(body.items ?? 1), 1, 100));
+    const amount = boundedDecimal(body.amount ?? 99.99, 99.99, 1_000_000);
+    const items = Math.max(1, boundedInteger(body.items ?? 1, 1, 100));
     const channel = body.channel ?? 'api';
     const failAt = (body.fail_at ?? '').toLowerCase();
     const role = String(req.headers['x-demo-role'] ?? 'customer').toLowerCase();
@@ -319,9 +320,4 @@ export class AppController {
     return delays[dependency];
   }
 
-  private safeNumber(value: string, fallback: number, maximum: number): number {
-    const parsed = Number(value);
-    if (!Number.isFinite(parsed) || parsed < 0) return fallback;
-    return Math.min(Math.round(parsed), maximum);
-  }
 }

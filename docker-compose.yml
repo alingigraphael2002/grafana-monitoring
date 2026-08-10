@@ -13,6 +13,17 @@ services:
     depends_on:
       - alloy
 
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
     networks:
       - grafana-monitoring
 
@@ -28,6 +39,12 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
     networks:
       - grafana-monitoring
 
@@ -39,10 +56,27 @@ services:
       - "3100:3100"
     volumes:
       - ./loki/loki-config.yaml:/etc/loki/config.yaml
+      - loki-data:/var/loki
     command:
       - -config.file=/etc/loki/config.yaml
+    depends_on:
+      loki-volume-init:
+        condition: service_completed_successfully
     networks:
       - grafana-monitoring
+
+  loki-volume-init:
+    image: node:22-alpine
+    container_name: grafana-monitoring-loki-volume-init
+    user: "0:0"
+    network_mode: none
+    command:
+      - sh
+      - -c
+      - chown -R 10001:10001 /var/loki
+    volumes:
+      - loki-data:/var/loki
+    restart: "no"
 
 
   mimir:
@@ -52,6 +86,7 @@ services:
       - "9009:9009"
     volumes:
       - ./mimir/mimir-config.yaml:/etc/mimir/config.yaml
+      - mimir-data:/var/mimir
     command:
       - -target=all
       - -config.file=/etc/mimir/config.yaml
@@ -103,4 +138,6 @@ networks:
 
 volumes:
   grafana-storage:
+  loki-data:
+  mimir-data:
   tempo-data:

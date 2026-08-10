@@ -113,7 +113,7 @@
                                           "type":  "loki",
                                           "uid":  "loki"
                                       },
-                       "title":  "Checkout / stage traces (logs with trace_id)",
+                       "title":  "Checkout / stage trace logs",
                        "targets":  [
                                        {
                                            "editorMode":  "code",
@@ -123,7 +123,7 @@
                                        }
                                    ],
                        "type":  "logs",
-                       "description":  "Click TraceID to open Tempo. Generate traffic with POST /api/checkout.",
+                       "description":  "Click TraceID to open the correlated Tempo trace. Generate traffic with POST /api/checkout.",
                        "options":  {
                                        "showLabels":  false,
                                        "enableLogDetails":  true,
@@ -1870,6 +1870,43 @@
                                        "sortOrder":  "Descending",
                                        "wrapLogMessage":  true,
                                        "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  202,
+                       "gridPos":  {
+                                       "y":  60,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  8
+                                   },
+                       "datasource":  {
+                                          "type":  "tempo",
+                                          "uid":  "tempo"
+                                      },
+                       "title":  "Tempo trace search",
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "tempo",
+                                                              "uid":  "tempo"
+                                                          },
+                                           "query":  "{ resource.service.name = \"nestjs-observability-demo\" }",
+                                           "queryType":  "traceqlSearch",
+                                           "limit":  20,
+                                           "refId":  "A",
+                                           "tableType":  "traces"
+                                       }
+                                   ],
+                       "type":  "traces",
+                       "description":  "Native Tempo results. Open a trace to inspect the checkout span hierarchy.",
+                       "options":  {
+                                       "showTraceId":  true,
+                                       "showSpanId":  false,
+                                       "spanBar":  {
+                                                       "type":  "None",
+                                                       "tag":  null
+                                                   }
                                    }
                    }
                ],

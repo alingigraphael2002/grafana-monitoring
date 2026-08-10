@@ -117,7 +117,7 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "Classified errors/sec",
+                       "description":  "Failed HTTP requests/sec",
                        "type":  "stat",
                        "id":  1,
                        "datasource":  {
@@ -147,7 +147,7 @@
                                        },
                        "targets":  [
                                        {
-                                           "legendFormat":  "Error rate",
+                                           "legendFormat":  "HTTP error rate",
                                            "editorMode":  "code",
                                            "instant":  true,
                                            "expr":  "sum(rate(api_errors_total[5m]))",
@@ -155,7 +155,7 @@
                                            "range":  false
                                        }
                                    ],
-                       "title":  "Error rate",
+                       "title":  "HTTP error rate",
                        "gridPos":  {
                                        "y":  0,
                                        "w":  6,
@@ -333,7 +333,7 @@
                                        },
                        "targets":  [
                                        {
-                                           "legendFormat":  "Errors in range",
+                                           "legendFormat":  "Failed requests in range",
                                            "editorMode":  "code",
                                            "instant":  true,
                                            "expr":  "sum(increase(api_errors_total[$__range])) or vector(0)",
@@ -341,7 +341,7 @@
                                            "range":  false
                                        }
                                    ],
-                       "title":  "Errors in range",
+                       "title":  "Failed requests in range",
                        "gridPos":  {
                                        "y":  0,
                                        "w":  6,
@@ -464,12 +464,12 @@
                                        {
                                            "editorMode":  "code",
                                            "legendFormat":  "{{dependency}}",
-                                           "expr":  "sum by (dependency) (rate(api_errors_total[$__rate_interval]))",
+                                           "expr":  "sum by (dependency) (rate(dependency_requests_total{outcome=\"failure\"}[$__rate_interval]))",
                                            "refId":  "A",
                                            "range":  true
                                        }
                                    ],
-                       "title":  "Errors by dependency",
+                       "title":  "Dependency failures",
                        "gridPos":  {
                                        "y":  4,
                                        "w":  12,
@@ -510,7 +510,7 @@
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
-                       "title":  "Top error operations",
+                       "title":  "Top failing API routes",
                        "targets":  [
                                        {
                                            "legendFormat":  "{{operation}}",

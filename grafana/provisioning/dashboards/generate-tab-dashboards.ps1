@@ -110,11 +110,24 @@ function Logs($id, $x, $y, $w, $h, $title, $expr, $desc='') {
   }
 }
 
+function Traces($id, $x, $y, $w, $h, $title, $query, $desc='') {
+  return @{
+    datasource = @{ type='tempo'; uid='tempo' }
+    description = $desc
+    gridPos = @{ h=$h; w=$w; x=$x; y=$y }
+    id = $id
+    options = @{ spanBar=@{ type='None'; tag=$null }; showTraceId=$true; showSpanId=$false }
+    targets = @(@{ datasource=@{ type='tempo'; uid='tempo' }; query=$query; queryType='traceqlSearch'; limit=20; refId='A'; tableType='traces' })
+    title = $title
+    type = 'traces'
+  }
+}
+
 function Row($id, $y, $title) {
   return @{ collapsed=$false; gridPos=@{ h=1; w=24; x=0; y=$y }; id=$id; panels=@(); title=$title; type='row' }
 }
 
-$outDir = 'C:\grafana-monitoring\grafana\provisioning\dashboards\json'
+$outDir = Join-Path $PSScriptRoot 'json'
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 
 # --- 1. API Request Metrics ---
@@ -163,13 +176,13 @@ Save-DashJson $dash '01-api-request-metrics.json'
 
 # --- 2. Error Telemetry ---
 $p = @()
-$p += (Stat 1 0 0 6 4 'Error rate' 'sum(rate(api_errors_total[5m]))' 'ops' 2 'Classified errors/sec')
+$p += (Stat 1 0 0 6 4 'HTTP error rate' 'sum(rate(api_errors_total[5m]))' 'ops' 2 'Failed HTTP requests/sec')
 $p += (Stat 2 6 0 6 4 '5xx share' '100 * sum(rate(api_requests_total{status_code=~"5.."}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)' 'percent' 2)
 $p += (Stat 3 12 0 6 4 '4xx share' '100 * sum(rate(api_requests_total{status_code=~"4.."}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)' 'percent' 2)
-$p += (Stat 4 18 0 6 4 'Errors in range' 'sum(increase(api_errors_total[$__range])) or vector(0)' 'short' 0)
+$p += (Stat 4 18 0 6 4 'Failed requests in range' 'sum(increase(api_errors_total[$__range])) or vector(0)' 'short' 0)
 $p += (Timeseries 5 0 4 12 8 'Errors by type' @(@{ expr='sum by (error_type) (rate(api_errors_total[$__rate_interval]))'; legend='{{error_type}}' }) 'ops' 'bars' 'normal')
-$p += (Timeseries 6 12 4 12 8 'Errors by dependency' @(@{ expr='sum by (dependency) (rate(api_errors_total[$__rate_interval]))'; legend='{{dependency}}' }) 'ops' 'bars' 'normal')
-$p += (BarGauge 7 0 12 12 8 'Top error operations' 'topk(8, sum by (operation) (increase(api_errors_total[$__range])))' '{{operation}}')
+$p += (Timeseries 6 12 4 12 8 'Dependency failures' @(@{ expr='sum by (dependency) (rate(dependency_requests_total{outcome="failure"}[$__rate_interval]))'; legend='{{dependency}}' }) 'ops' 'bars' 'normal')
+$p += (BarGauge 7 0 12 12 8 'Top failing API routes' 'topk(8, sum by (operation) (increase(api_errors_total[$__range])))' '{{operation}}')
 $p += (Logs 8 12 12 12 8 'Error / warn logs' '{service_name="nestjs-observability-demo"} | json | level=~"error|warn"' 'Structured error and warning events')
 $p += (Logs 9 0 20 24 8 'Failed operations' '{service_name="nestjs-observability-demo"} | json | event="operation_failed"' 'Distributed stage failures (see Distributed Tracing tab for per-stage detail)')
 
@@ -189,8 +202,9 @@ $stages = @(
 )
 
 $p = @()
-$p += (Logs 1 0 0 24 6 'Checkout / stage traces (logs with trace_id)' '{service_name="nestjs-observability-demo"} | json | event=~"operation_.*|business_transaction|request_completed"' 'Click TraceID to open Tempo. Generate traffic with POST /api/checkout.')
-$y = 6
+$p += (Traces 1 0 0 24 8 'Tempo trace search' '{ resource.service.name = "nestjs-observability-demo" }' 'Native Tempo results. Open a trace to inspect the checkout span hierarchy.')
+$p += (Logs 2 0 8 24 6 'Checkout / stage trace logs' '{service_name="nestjs-observability-demo"} | json | event=~"operation_.*|business_transaction|request_completed"' 'Click TraceID to open the correlated Tempo trace. Generate traffic with POST /api/checkout.')
+$y = 14
 $id = 10
 foreach ($s in $stages) {
   $p += (Row ($id) $y $s.name)
@@ -299,10 +313,10 @@ $p += (Timeseries 13 0 29 24 7 '5xx error rate' @(@{ expr='100 * sum(rate(api_re
 $p += (Row 140 36 'Throughput')
 $p += (Timeseries 14 0 37 24 7 'Request throughput' @(@{ expr='sum(rate(api_requests_total[$__rate_interval]))'; legend='req/s' }) 'reqps')
 
-$p += (Row 150 44 'SLO breaches')
-$p += (BarGauge 15 0 45 24 7 'SLO breaches by indicator / route' 'sum by (indicator, route) (increase(api_slo_breaches_total[$__range]))' '{{indicator}}: {{route}}')
+$p += (Row 150 44 'Request-level SLI violations')
+$p += (BarGauge 15 0 45 24 7 'SLI violations by indicator / route' 'sum by (indicator, route) (increase(api_sli_violations_total[$__range]))' '{{indicator}}: {{route}}')
 
-$dash = New-Dash 'tab-api-slo-metrics' 'API Availability and SLO Metrics' 'Tab: Availability, success rate, latency, error rate, throughput, and SLO breaches.' $p @('nestjs','observability','tabs','slo')
+$dash = New-Dash 'tab-api-slo-metrics' 'API Availability and SLO Metrics' 'Tab: Availability, success rate, latency, error rate, throughput, and request-level SLI violations.' $p @('nestjs','observability','tabs','slo')
 Save-DashJson $dash '06-api-slo-metrics.json'
 
 # --- 7. Structured Application Logs ---
@@ -317,21 +331,25 @@ $dash = New-Dash 'tab-structured-logs' 'Structured Application Logs' 'Tab: Struc
 Save-DashJson $dash '07-structured-application-logs.json'
 
 # --- 8. API Executive Overview ---
+$availabilityByService = '100 * (sum by (service) (rate(api_requests_total[5m])) - sum by (service) (rate(api_requests_total{status_code=~"5.."}[5m]))) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)'
+$successByService = '100 * sum by (service) (rate(api_requests_total{status_code!~"4..|5.."}[5m])) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)'
+$latencyByService = 'histogram_quantile(0.95, sum by (service, le) (rate(api_request_duration_seconds_bucket[5m])))'
+$breachingSlos = "label_replace(($availabilityByService) < 99.9, `"slo`", `"availability`", `"service`", `".*`") or label_replace(($successByService) < 99, `"slo`", `"success_rate`", `"service`", `".*`") or label_replace(($latencyByService) > 0.5, `"slo`", `"p95_latency`", `"service`", `".*`")"
 $p = @()
 $p += (Stat 1 0 0 4 4 'Availability' '100 * (sum(rate(api_requests_total[5m])) - sum(rate(api_requests_total{status_code=~"5.."}[5m]))) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)' 'percent' 2 '' @{ mode='absolute'; steps=@(@{color='red';value=$null},@{color='yellow';value=99},@{color='green';value=99.9}) })
 $p += (Stat 2 4 0 4 4 'Request volume' 'sum(increase(api_requests_total[$__range]))' 'short' 0)
 $p += (Stat 3 8 0 4 4 'Success rate' '100 * sum(rate(api_requests_total{status_code!~"4..|5.."}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)' 'percent' 2 '' @{ mode='absolute'; steps=@(@{color='red';value=$null},@{color='yellow';value=95},@{color='green';value=99}) })
 $p += (Stat 4 12 0 4 4 '5xx error rate' '100 * sum(rate(api_requests_total{status_code=~"5.."}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)' 'percent' 2)
 $p += (Stat 5 16 0 4 4 'P95 latency' 'histogram_quantile(0.95, sum by (le) (rate(api_request_duration_seconds_bucket[5m])))' 's' 3 '' @{ mode='absolute'; steps=@(@{color='green';value=$null},@{color='yellow';value=0.5},@{color='red';value=1}) })
-$p += (Stat 6 20 0 4 4 'Services breaching SLOs' '(100 * (sum(rate(api_requests_total[5m])) - sum(rate(api_requests_total{status_code=~"5.."}[5m]))) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)) < bool 99.9' 'short' 0 '' @{ mode='absolute'; steps=@(@{color='green';value=$null},@{color='red';value=1}) })
+$p += (Stat 6 20 0 4 4 'Services breaching SLOs' "count(count by (service) ($breachingSlos)) or vector(0)" 'short' 0 '' @{ mode='absolute'; steps=@(@{color='green';value=$null},@{color='red';value=1}) })
 
 $p += (BarGauge 7 0 4 12 8 'Top failing APIs' 'topk(5, sum by (route) (increase(api_requests_total{status_code=~"5.."}[$__range])))' '{{route}}')
-$p += (BarGauge 8 12 4 12 8 'Services breaching SLOs' '(100 * (sum(rate(api_requests_total[5m])) - sum(rate(api_requests_total{status_code=~"5.."}[5m]))) / clamp_min(sum(rate(api_requests_total[5m])), 0.000001)) < bool 99.9' 'nestjs-observability-demo')
+$p += (BarGauge 8 12 4 12 8 'Services breaching SLOs' $breachingSlos '{{service}} — {{slo}}')
 $p += (Timeseries 9 0 12 12 8 'Request volume over time' @(@{ expr='sum(rate(api_requests_total[$__rate_interval]))'; legend='req/s' }) 'reqps')
 $p += (Timeseries 10 12 12 12 8 'P95 latency over time' @(@{ expr='histogram_quantile(0.95, sum by (le) (rate(api_request_duration_seconds_bucket[$__rate_interval])))'; legend='P95' }) 's')
 $p += (Logs 11 0 20 24 8 'Executive log stream' '{service_name="nestjs-observability-demo"} | json | level=~"error|warn"')
 
-$dash = New-Dash 'tab-executive-overview' 'API Executive Overview' 'Tab: Executive view — availability, volume, success rate, 5xx, P95, top failing APIs, SLO breaches.' $p @('nestjs','observability','tabs','executive')
+$dash = New-Dash 'tab-executive-overview' 'API Executive Overview' 'Tab: Executive view — availability, volume, success rate, 5xx, P95, top failing APIs, and service-level SLO status.' $p @('nestjs','observability','tabs','executive')
 Save-DashJson $dash '08-api-executive-overview.json'
 
 # Remove old dashboard files that used previous UIDs
