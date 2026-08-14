@@ -97,6 +97,17 @@
                       "title":  "API Executive Overview",
                       "includeVars":  true,
                       "tooltip":  "API Executive Overview"
+                  },
+                  {
+                      "url":  "/d/tab-metric-discovery",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Metric Discovery",
+                      "includeVars":  true,
+                      "tooltip":  "Deep metric discovery and data lineage"
                   }
               ],
     "liveNow":  true,
@@ -117,13 +128,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Panel link opens Metric Discovery for api_requests_total.",
                        "type":  "stat",
                        "id":  1,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_requests_total",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_requests_total",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_requests_total"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -488,7 +515,7 @@
                                            "legendFormat":  "Services breaching SLOs",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "count(count by (service) (label_replace((100 * (sum by (service) (rate(api_requests_total[5m])) - sum by (service) (rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99.9, \"slo\", \"availability\", \"service\", \".*\") or label_replace((100 * sum by (service) (rate(api_requests_total{status_code!~\"4..|5..\"}[5m])) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99, \"slo\", \"success_rate\", \"service\", \".*\") or label_replace(histogram_quantile(0.95, sum by (service, le) (rate(api_request_duration_seconds_bucket[5m]))) \u003e 0.5, \"slo\", \"p95_latency\", \"service\", \".*\"))) or vector(0)",
+                                           "expr":  "count(count by (service) (label_replace((100 * (sum by (service) (rate(api_requests_total[5m])) - sum by (service) (rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99.9, \"slo\", \"availability\", \"service\", \".*\") or label_replace((100 * sum by (service) (rate(api_requests_total{status_code!~\"4..|5..\"}[5m])) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99, \"slo\", \"success_rate\", \"service\", \".*\") or label_replace((histogram_quantile(0.95, sum by (service, le) (rate(api_request_duration_seconds_bucket[5m])))) \u003e 0.5, \"slo\", \"p95_latency\", \"service\", \".*\"))) or vector(0)",
                                            "refId":  "A",
                                            "range":  false
                                        }
@@ -601,7 +628,7 @@
                                            "legendFormat":  "{{service}} — {{slo}}",
                                            "editorMode":  "code",
                                            "instant":  true,
-                                           "expr":  "label_replace((100 * (sum by (service) (rate(api_requests_total[5m])) - sum by (service) (rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99.9, \"slo\", \"availability\", \"service\", \".*\") or label_replace((100 * sum by (service) (rate(api_requests_total{status_code!~\"4..|5..\"}[5m])) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99, \"slo\", \"success_rate\", \"service\", \".*\") or label_replace(histogram_quantile(0.95, sum by (service, le) (rate(api_request_duration_seconds_bucket[5m]))) \u003e 0.5, \"slo\", \"p95_latency\", \"service\", \".*\")",
+                                           "expr":  "label_replace((100 * (sum by (service) (rate(api_requests_total[5m])) - sum by (service) (rate(api_requests_total{status_code=~\"5..\"}[5m]))) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99.9, \"slo\", \"availability\", \"service\", \".*\") or label_replace((100 * sum by (service) (rate(api_requests_total{status_code!~\"4..|5..\"}[5m])) / clamp_min(sum by (service) (rate(api_requests_total[5m])), 0.000001)) \u003c 99, \"slo\", \"success_rate\", \"service\", \".*\") or label_replace((histogram_quantile(0.95, sum by (service, le) (rate(api_request_duration_seconds_bucket[5m])))) \u003e 0.5, \"slo\", \"p95_latency\", \"service\", \".*\")",
                                            "refId":  "A",
                                            "range":  false
                                        }

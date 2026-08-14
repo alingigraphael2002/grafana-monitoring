@@ -36,6 +36,7 @@ Set `OTEL_EXPORTER_OTLP_ENDPOINT` (default `http://alloy:4318`) when exporting t
 | `POST /api/echo` | Payload size metrics |
 | `GET /api/dependencies/:dependency` | Single dependency metrics/span |
 | `POST /api/checkout` | Full distributed trace + business metrics |
+| `GET /api/observability/catalog` | Searchable metric lineage (q, metric, family, datasource, source_api, display) |
 | `GET /metrics` | Prometheus scrape target |
 
 Simulated dependencies: `postgresql_citus`, `kafka`, `external_api`, `redis_cache`, `file_storage`, `auth_provider`.
@@ -67,7 +68,7 @@ Import:
 - `postman/NestJS-Observability-Demo.postman_collection.json`
 - `postman/Local-NestJS-Demo.postman_environment.json`
 
-Folders **01–08** feed API Request Metrics. Folders **09–11** cover distributed tracing, dependency metrics, business/error/SLO telemetry.
+Folders **01–08** feed API Request Metrics. Folders **09–11** cover distributed tracing, dependency metrics, business/error/SLO telemetry. Folder **12** searches metric discovery and lineage.
 
 ## Metric families
 
@@ -76,6 +77,7 @@ Folders **01–08** feed API Request Metrics. Folders **09–11** cover distribu
 - **Dependencies:** `dependency_requests_total`, `dependency_request_duration_seconds`, `dependency_available`
 - **Business:** `business_transactions_total`, `business_revenue_total`, `business_items_total`
 - **SLOs:** `api_slo_target`, `api_sli_violations_total`
+- **Lineage:** `metric_lineage_info`
 
 The `/metrics` and `/health` endpoints are excluded from API request metrics so Prometheus scrapes and health probes do not distort API SLIs.
 

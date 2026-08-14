@@ -97,6 +97,17 @@
                       "title":  "API Executive Overview",
                       "includeVars":  true,
                       "tooltip":  "API Executive Overview"
+                  },
+                  {
+                      "url":  "/d/tab-metric-discovery",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Metric Discovery",
+                      "includeVars":  true,
+                      "tooltip":  "Deep metric discovery and data lineage"
                   }
               ],
     "liveNow":  true,
@@ -132,13 +143,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "Total HTTP requests in range",
+                       "description":  "Total HTTP requests in range Panel link opens Metric Discovery for api_requests_total.",
                        "type":  "stat",
                        "id":  1,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_requests_total",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_requests_total",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_requests_total"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -273,13 +300,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "P95 latency",
+                       "description":  "P95 latency Panel link opens Metric Discovery for api_request_duration_seconds.",
                        "type":  "stat",
                        "id":  3,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_request_duration_seconds",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_request_duration_seconds",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_request_duration_seconds"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -429,13 +472,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Panel link opens Metric Discovery for api_requests_total.",
                        "type":  "stat",
                        "id":  5,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_requests_total",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_requests_total",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_requests_total"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -578,13 +637,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Panel link opens Metric Discovery for api_active_requests.",
                        "type":  "stat",
                        "id":  7,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_active_requests",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_active_requests",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_active_requests"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -862,13 +937,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Panel link opens Metric Discovery for api_request_timeouts_total.",
                        "type":  "stat",
                        "id":  11,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_request_timeouts_total",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_request_timeouts_total",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_request_timeouts_total"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -1003,13 +1094,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Panel link opens Metric Discovery for api_request_retries_total.",
                        "type":  "stat",
                        "id":  13,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_request_retries_total",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_request_retries_total",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_request_retries_total"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -1144,13 +1251,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Panel link opens Metric Discovery for api_rate_limit_hits_total.",
                        "type":  "stat",
                        "id":  15,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_rate_limit_hits_total",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_rate_limit_hits_total",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_rate_limit_hits_total"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {

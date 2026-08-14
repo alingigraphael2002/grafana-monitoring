@@ -97,6 +97,17 @@
                       "title":  "API Executive Overview",
                       "includeVars":  true,
                       "tooltip":  "API Executive Overview"
+                  },
+                  {
+                      "url":  "/d/tab-metric-discovery",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Metric Discovery",
+                      "includeVars":  true,
+                      "tooltip":  "Deep metric discovery and data lineage"
                   }
               ],
     "liveNow":  true,

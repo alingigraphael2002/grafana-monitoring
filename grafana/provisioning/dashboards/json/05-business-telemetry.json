@@ -97,6 +97,17 @@
                       "title":  "API Executive Overview",
                       "includeVars":  true,
                       "tooltip":  "API Executive Overview"
+                  },
+                  {
+                      "url":  "/d/tab-metric-discovery",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Metric Discovery",
+                      "includeVars":  true,
+                      "tooltip":  "Deep metric discovery and data lineage"
                   }
               ],
     "liveNow":  true,
@@ -117,13 +128,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Total checkout transactions since the API process started. Generated only by POST /api/checkout. Panel link opens Metric Discovery for business_transactions_total.",
                        "type":  "stat",
                        "id":  1,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=business_transactions_total",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: business_transactions_total",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for business_transactions_total"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -390,7 +417,7 @@
                                                             "color":  {
                                                                           "mode":  "palette-classic"
                                                                       },
-                                                            "unit":  "ops"
+                                                            "unit":  "short"
                                                         },
                                            "overrides":  [
 
@@ -443,9 +470,9 @@
                                                                            "lineInterpolation":  "smooth",
                                                                            "fillOpacity":  25,
                                                                            "lineWidth":  2,
-                                                                           "drawStyle":  "line",
+                                                                           "drawStyle":  "bars",
                                                                            "stacking":  {
-                                                                                            "mode":  "none",
+                                                                                            "mode":  "normal",
                                                                                             "group":  "A"
                                                                                         },
                                                                            "showPoints":  "never",
@@ -469,7 +496,7 @@
                                            "range":  true
                                        }
                                    ],
-                       "title":  "Revenue rate",
+                       "title":  "Revenue",
                        "gridPos":  {
                                        "y":  4,
                                        "w":  12,
@@ -518,7 +545,7 @@
                                                             "color":  {
                                                                           "mode":  "palette-classic"
                                                                       },
-                                                            "unit":  "ops"
+                                                            "unit":  "short"
                                                         },
                                            "overrides":  [
 
@@ -563,7 +590,7 @@
                                        }
                                    ],
                        "type":  "logs",
-                       "description":  "",
+                       "description":  "Only POST /api/checkout emits event=business_transaction. Folders 01-08 will not create these logs.",
                        "options":  {
                                        "showLabels":  false,
                                        "enableLogDetails":  true,

@@ -97,7 +97,7 @@ Import both files:
 - `nestjs-observability-demo/postman/NestJS-Observability-Demo.postman_collection.json`
 - `nestjs-observability-demo/postman/Local-NestJS-Demo.postman_environment.json`
 
-Select **Local NestJS Demo**, then run folders **09–11** to populate tracing, dependencies, business metrics, errors, and SLO panels. Folders **01–08** continue to populate the original API Request Metrics.
+Select **Local NestJS Demo**, then run folders **09–11** to populate tracing, dependencies, business metrics, errors, and SLO panels. Folders **01–08** continue to populate the original API Request Metrics. Folder **12** searches the metric lineage catalog.
 
 ## Grafana
 
@@ -119,6 +119,15 @@ Open any dashboard under **Observability**. The top link bar is the **tab naviga
 6. **API Availability and SLO** — availability, success rate, latency, error rate, throughput  
 7. **Structured Application Logs** — JSON application events  
 8. **API Executive Overview** — availability, volume, success rate, 5xx, P95, top failing APIs, services breaching SLOs
+9. **Metric Discovery and Lineage** — search catalog, filter metadata, drill into series/logs/traces
+
+KPI panels include a **Lineage** link that opens this tab with the metric pre-selected.
+
+Search the catalog from the API:
+
+```powershell
+Invoke-RestMethod "http://localhost:3001/api/observability/catalog?q=timeout"
+```
 
 After editing JSON, wait ~10s or run `docker compose restart grafana`.
 
@@ -161,6 +170,7 @@ The checkout trace includes gateway, authentication, authorisation, application 
 - Dependencies: `dependency_requests_total`, `dependency_request_duration_seconds`, `dependency_available`
 - Business: `business_transactions_total`, `business_revenue_total`, `business_items_total`
 - SLOs: `api_slo_target`, `api_sli_violations_total`
+- Lineage catalog: `metric_lineage_info` (and `GET /api/observability/catalog`)
 
 Example dependency P95:
 

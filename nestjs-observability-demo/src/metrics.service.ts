@@ -6,6 +6,7 @@ import {
   Histogram,
   Registry,
 } from 'prom-client';
+import { lineageLabelSet, metricCatalog } from './metric-catalog';
 
 @Injectable()
 export class MetricsService {
@@ -133,6 +134,26 @@ export class MetricsService {
     registers: [this.registry],
   });
 
+  readonly lineageInfo = new Gauge({
+    name: 'metric_lineage_info',
+    help: 'Searchable metric lineage: display name, source API, datasource, origin, labels, and related log/trace names',
+    labelNames: [
+      'catalog_id',
+      'display_name',
+      'metric_name',
+      'family',
+      'source_api',
+      'datasource',
+      'origin',
+      'series_family',
+      'label_set',
+      'log_event',
+      'span_name',
+      'dashboard_tab',
+    ] as const,
+    registers: [this.registry],
+  });
+
   constructor() {
     this.registry.setDefaultLabels({
       service: 'nestjs-observability-demo',
@@ -143,6 +164,26 @@ export class MetricsService {
     this.sloTarget.set({ indicator: 'availability' }, 0.999);
     this.sloTarget.set({ indicator: 'success_rate' }, 0.99);
     this.sloTarget.set({ indicator: 'p95_latency_seconds' }, 0.5);
+
+    for (const entry of metricCatalog) {
+      this.lineageInfo.set(
+        {
+          catalog_id: entry.id,
+          display_name: entry.display_name,
+          metric_name: entry.metric_name,
+          family: entry.family,
+          source_api: entry.source_api,
+          datasource: entry.datasource,
+          origin: entry.origin,
+          series_family: entry.series_family,
+          label_set: lineageLabelSet(entry),
+          log_event: entry.log_event,
+          span_name: entry.span_name,
+          dashboard_tab: entry.dashboard_tab,
+        },
+        1,
+      );
+    }
   }
 
   async render(): Promise<string> {

@@ -1,0 +1,679 @@
+{
+    "annotations":  {
+                        "list":  [
+
+                                 ]
+                    },
+    "description":  "Tab: Deep metric discovery, data lineage, and drill-down to series, logs, and traces.",
+    "editable":  true,
+    "fiscalYearStartMonth":  0,
+    "graphTooltip":  1,
+    "id":  null,
+    "links":  [
+                  {
+                      "url":  "/d/tab-api-request-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Request Metrics",
+                      "includeVars":  true,
+                      "tooltip":  "API Request Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-error-telemetry",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Error Telemetry",
+                      "includeVars":  true,
+                      "tooltip":  "Error Telemetry"
+                  },
+                  {
+                      "url":  "/d/tab-distributed-tracing",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Distributed Tracing",
+                      "includeVars":  true,
+                      "tooltip":  "Distributed Tracing"
+                  },
+                  {
+                      "url":  "/d/tab-dependency-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Dependency Metrics",
+                      "includeVars":  true,
+                      "tooltip":  "Dependency Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-business-telemetry",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Business Telemetry",
+                      "includeVars":  true,
+                      "tooltip":  "Business Telemetry"
+                  },
+                  {
+                      "url":  "/d/tab-api-slo-metrics",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Availability and SLO",
+                      "includeVars":  true,
+                      "tooltip":  "API Availability and SLO Metrics"
+                  },
+                  {
+                      "url":  "/d/tab-structured-logs",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Structured Application Logs",
+                      "includeVars":  true,
+                      "tooltip":  "Structured Application Logs"
+                  },
+                  {
+                      "url":  "/d/tab-executive-overview",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "API Executive Overview",
+                      "includeVars":  true,
+                      "tooltip":  "API Executive Overview"
+                  },
+                  {
+                      "url":  "/d/tab-metric-discovery",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Metric Discovery",
+                      "includeVars":  true,
+                      "tooltip":  "Deep metric discovery and data lineage"
+                  }
+              ],
+    "liveNow":  true,
+    "panels":  [
+                   {
+                       "title":  "How to use deep metric discovery",
+                       "gridPos":  {
+                                       "y":  0,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  5
+                                   },
+                       "id":  1,
+                       "type":  "text",
+                       "options":  {
+                                       "content":  "Search and filter the lineage catalog with the variables above (metric name, display name, family, data source, source API). Column filters on the table also work.\r\n\r\n**Lineage fields:** metric name, source API, Grafana data source (mimir / loki / tempo), origin file, series family (Prometheus series or simulated store — not a SQL table in this lab), labels/tags, related log event, span name.\r\n\r\n**Drill-down:** pick a metric, then use live series, related logs, and related traces. Click TraceID on a log line to open Tempo. KPI panels on other tabs have a **Lineage** panel link.\r\n\r\nJSON search API: `GET /api/observability/catalog?q=timeout`",
+                                       "code":  {
+                                                    "showMiniMap":  false,
+                                                    "language":  "markdown",
+                                                    "showLineNumbers":  false
+                                                },
+                                       "mode":  "markdown"
+                                   }
+                   },
+                   {
+                       "id":  10,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Lineage catalog",
+                       "gridPos":  {
+                                       "y":  5,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "cellHeight":  "sm",
+                                       "footer":  {
+                                                      "reducer":  [
+                                                                      "sum"
+                                                                  ],
+                                                      "show":  false,
+                                                      "fields":  "",
+                                                      "countRows":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "description":  "Filterable metadata from metric_lineage_info. Each row traces a displayed signal back to its origin.",
+                       "type":  "table",
+                       "id":  11,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "transformations":  [
+                                               {
+                                                   "id":  "labelsToFields",
+                                                   "options":  {
+
+                                                               }
+                                               },
+                                               {
+                                                   "id":  "organize",
+                                                   "options":  {
+                                                                   "excludeByName":  {
+                                                                                         "Value":  true,
+                                                                                         "instance":  true,
+                                                                                         "service":  true,
+                                                                                         "environment":  true,
+                                                                                         "__name__":  true,
+                                                                                         "Time":  true,
+                                                                                         "job":  true
+                                                                                     }
+                                                               }
+                                               }
+                                           ],
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "align":  "auto",
+                                                                           "cellOptions":  {
+                                                                                               "type":  "auto"
+                                                                                           },
+                                                                           "inspect":  true,
+                                                                           "filterable":  true
+                                                                       }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "range":  false,
+                                           "refId":  "A",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "metric_lineage_info{metric_name=~\"$metric\",display_name=~\"$display\",family=~\"$family\",datasource=~\"$datasource\",source_api=~\"$source_api\"}",
+                                           "format":  "table"
+                                       }
+                                   ],
+                       "title":  "Searchable metric lineage",
+                       "gridPos":  {
+                                       "y":  6,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  12
+                                   }
+                   },
+                   {
+                       "id":  20,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Live series (Mimir)",
+                       "gridPos":  {
+                                       "y":  18,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "cellHeight":  "sm",
+                                       "footer":  {
+                                                      "reducer":  [
+                                                                      "sum"
+                                                                  ],
+                                                      "show":  false,
+                                                      "fields":  "",
+                                                      "countRows":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "description":  "Raw series and labels for the selected metric. Histogram families include _bucket, _sum, and _count.",
+                       "type":  "table",
+                       "id":  21,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "transformations":  [
+                                               {
+                                                   "id":  "labelsToFields",
+                                                   "options":  {
+
+                                                               }
+                                               },
+                                               {
+                                                   "id":  "organize",
+                                                   "options":  {
+                                                                   "excludeByName":  {
+                                                                                         "Value":  true,
+                                                                                         "instance":  true,
+                                                                                         "service":  true,
+                                                                                         "environment":  true,
+                                                                                         "__name__":  true,
+                                                                                         "Time":  true,
+                                                                                         "job":  true
+                                                                                     }
+                                                               }
+                                               }
+                                           ],
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "align":  "auto",
+                                                                           "cellOptions":  {
+                                                                                               "type":  "auto"
+                                                                                           },
+                                                                           "inspect":  true,
+                                                                           "filterable":  true
+                                                                       }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "range":  false,
+                                           "refId":  "A",
+                                           "editorMode":  "code",
+                                           "instant":  true,
+                                           "expr":  "{__name__=~\"$metric($|_bucket|_sum|_count)\",job=\"nestjs-observability-demo\"}",
+                                           "format":  "table"
+                                       }
+                                   ],
+                       "title":  "Underlying Prometheus series",
+                       "gridPos":  {
+                                       "y":  19,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  10
+                                   }
+                   },
+                   {
+                       "options":  {
+                                       "legend":  {
+                                                      "placement":  "right",
+                                                      "showLegend":  true,
+                                                      "calcs":  [
+                                                                    "mean",
+                                                                    "lastNotNull"
+                                                                ],
+                                                      "displayMode":  "table"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "desc",
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "description":  "Rate of the selected metric family. Choose a specific metric name for a focused view.",
+                       "type":  "timeseries",
+                       "id":  22,
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "mimir"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "spanNulls":  true,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "fillOpacity":  25,
+                                                                           "lineWidth":  2,
+                                                                           "drawStyle":  "line",
+                                                                           "stacking":  {
+                                                                                            "mode":  "none",
+                                                                                            "group":  "A"
+                                                                                        },
+                                                                           "showPoints":  "never",
+                                                                           "gradientMode":  "opacity"
+                                                                       },
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "ops"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "legendFormat":  "{{__name__}}",
+                                           "expr":  "sum by (__name__) (rate({__name__=~\"$metric($|_sum|_count)\",job=\"nestjs-observability-demo\"}[$__rate_interval]))",
+                                           "refId":  "A",
+                                           "range":  true
+                                       }
+                                   ],
+                       "title":  "Selected metric rate",
+                       "gridPos":  {
+                                       "y":  29,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  7
+                                   }
+                   },
+                   {
+                       "id":  30,
+                       "collapsed":  false,
+                       "type":  "row",
+                       "panels":  [
+
+                                  ],
+                       "title":  "Related records",
+                       "gridPos":  {
+                                       "y":  36,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  1
+                                   }
+                   },
+                   {
+                       "id":  31,
+                       "gridPos":  {
+                                       "y":  37,
+                                       "w":  12,
+                                       "x":  0,
+                                       "h":  10
+                                   },
+                       "datasource":  {
+                                          "type":  "loki",
+                                          "uid":  "loki"
+                                      },
+                       "title":  "Related logs",
+                       "targets":  [
+                                       {
+                                           "editorMode":  "code",
+                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=~\"$log_event\"",
+                                           "refId":  "A",
+                                           "queryType":  "range"
+                                       }
+                                   ],
+                       "type":  "logs",
+                       "description":  "Loki records for the selected log_event. These are the underlying log rows.",
+                       "options":  {
+                                       "showLabels":  false,
+                                       "enableLogDetails":  true,
+                                       "showCommonLabels":  false,
+                                       "showTime":  true,
+                                       "prettifyLogMessage":  true,
+                                       "sortOrder":  "Descending",
+                                       "wrapLogMessage":  true,
+                                       "dedupStrategy":  "none"
+                                   }
+                   },
+                   {
+                       "id":  32,
+                       "gridPos":  {
+                                       "y":  37,
+                                       "w":  12,
+                                       "x":  12,
+                                       "h":  10
+                                   },
+                       "datasource":  {
+                                          "type":  "tempo",
+                                          "uid":  "tempo"
+                                      },
+                       "title":  "Related traces",
+                       "targets":  [
+                                       {
+                                           "refId":  "A",
+                                           "tableType":  "traces",
+                                           "limit":  20,
+                                           "datasource":  {
+                                                              "type":  "tempo",
+                                                              "uid":  "tempo"
+                                                          },
+                                           "queryType":  "traceqlSearch",
+                                           "query":  "{ resource.service.name = \"nestjs-observability-demo\" \u0026\u0026 name =~ \"$span_name\" }"
+                                       }
+                                   ],
+                       "type":  "traces",
+                       "description":  "Tempo spans matching the selected span_name. Open a row to inspect the full checkout hierarchy.",
+                       "options":  {
+                                       "spanBar":  {
+                                                       "tag":  null,
+                                                       "type":  "None"
+                                                   },
+                                       "showSpanId":  false,
+                                       "showTraceId":  true
+                                   }
+                   }
+               ],
+    "refresh":  "5s",
+    "schemaVersion":  42,
+    "tags":  [
+                 "nestjs",
+                 "observability",
+                 "tabs",
+                 "lineage"
+             ],
+    "templating":  {
+                       "list":  [
+                                    {
+                                        "query":  "label_values(metric_lineage_info, metric_name)",
+                                        "hide":  0,
+                                        "options":  [
+
+                                                    ],
+                                        "current":  {
+                                                        "selected":  true,
+                                                        "value":  "$__all",
+                                                        "text":  "All"
+                                                    },
+                                        "allValue":  ".+",
+                                        "regex":  "",
+                                        "includeAll":  true,
+                                        "name":  "metric",
+                                        "skipUrlSync":  false,
+                                        "definition":  "label_values(metric_lineage_info, metric_name)",
+                                        "type":  "query",
+                                        "label":  "Metric name",
+                                        "multi":  true,
+                                        "refresh":  2,
+                                        "sort":  1,
+                                        "datasource":  {
+                                                           "type":  "prometheus",
+                                                           "uid":  "mimir"
+                                                       }
+                                    },
+                                    {
+                                        "query":  "label_values(metric_lineage_info, display_name)",
+                                        "hide":  0,
+                                        "options":  [
+
+                                                    ],
+                                        "current":  {
+                                                        "selected":  true,
+                                                        "value":  "$__all",
+                                                        "text":  "All"
+                                                    },
+                                        "allValue":  ".+",
+                                        "regex":  "",
+                                        "includeAll":  true,
+                                        "name":  "display",
+                                        "skipUrlSync":  false,
+                                        "definition":  "label_values(metric_lineage_info, display_name)",
+                                        "type":  "query",
+                                        "label":  "Display name",
+                                        "multi":  true,
+                                        "refresh":  2,
+                                        "sort":  1,
+                                        "datasource":  {
+                                                           "type":  "prometheus",
+                                                           "uid":  "mimir"
+                                                       }
+                                    },
+                                    {
+                                        "query":  "label_values(metric_lineage_info, family)",
+                                        "hide":  0,
+                                        "options":  [
+
+                                                    ],
+                                        "current":  {
+                                                        "selected":  true,
+                                                        "value":  "$__all",
+                                                        "text":  "All"
+                                                    },
+                                        "allValue":  ".+",
+                                        "regex":  "",
+                                        "includeAll":  true,
+                                        "name":  "family",
+                                        "skipUrlSync":  false,
+                                        "definition":  "label_values(metric_lineage_info, family)",
+                                        "type":  "query",
+                                        "label":  "Family",
+                                        "multi":  true,
+                                        "refresh":  2,
+                                        "sort":  1,
+                                        "datasource":  {
+                                                           "type":  "prometheus",
+                                                           "uid":  "mimir"
+                                                       }
+                                    },
+                                    {
+                                        "query":  "label_values(metric_lineage_info, datasource)",
+                                        "hide":  0,
+                                        "options":  [
+
+                                                    ],
+                                        "current":  {
+                                                        "selected":  true,
+                                                        "value":  "$__all",
+                                                        "text":  "All"
+                                                    },
+                                        "allValue":  ".+",
+                                        "regex":  "",
+                                        "includeAll":  true,
+                                        "name":  "datasource",
+                                        "skipUrlSync":  false,
+                                        "definition":  "label_values(metric_lineage_info, datasource)",
+                                        "type":  "query",
+                                        "label":  "Data source",
+                                        "multi":  true,
+                                        "refresh":  2,
+                                        "sort":  1,
+                                        "datasource":  {
+                                                           "type":  "prometheus",
+                                                           "uid":  "mimir"
+                                                       }
+                                    },
+                                    {
+                                        "query":  "label_values(metric_lineage_info, source_api)",
+                                        "hide":  0,
+                                        "options":  [
+
+                                                    ],
+                                        "current":  {
+                                                        "selected":  true,
+                                                        "value":  "$__all",
+                                                        "text":  "All"
+                                                    },
+                                        "allValue":  ".+",
+                                        "regex":  "",
+                                        "includeAll":  true,
+                                        "name":  "source_api",
+                                        "skipUrlSync":  false,
+                                        "definition":  "label_values(metric_lineage_info, source_api)",
+                                        "type":  "query",
+                                        "label":  "Source API",
+                                        "multi":  true,
+                                        "refresh":  2,
+                                        "sort":  1,
+                                        "datasource":  {
+                                                           "type":  "prometheus",
+                                                           "uid":  "mimir"
+                                                       }
+                                    },
+                                    {
+                                        "query":  "label_values(metric_lineage_info{metric_name=~\"$metric\"}, log_event)",
+                                        "hide":  0,
+                                        "options":  [
+
+                                                    ],
+                                        "current":  {
+                                                        "selected":  true,
+                                                        "value":  "$__all",
+                                                        "text":  "All"
+                                                    },
+                                        "allValue":  ".+",
+                                        "regex":  "",
+                                        "includeAll":  true,
+                                        "name":  "log_event",
+                                        "skipUrlSync":  false,
+                                        "definition":  "label_values(metric_lineage_info{metric_name=~\"$metric\"}, log_event)",
+                                        "type":  "query",
+                                        "label":  "Log event",
+                                        "multi":  true,
+                                        "refresh":  2,
+                                        "sort":  1,
+                                        "datasource":  {
+                                                           "type":  "prometheus",
+                                                           "uid":  "mimir"
+                                                       }
+                                    },
+                                    {
+                                        "query":  "label_values(metric_lineage_info{metric_name=~\"$metric\"}, span_name)",
+                                        "hide":  0,
+                                        "options":  [
+
+                                                    ],
+                                        "current":  {
+                                                        "selected":  true,
+                                                        "value":  "$__all",
+                                                        "text":  "All"
+                                                    },
+                                        "allValue":  ".+",
+                                        "regex":  "",
+                                        "includeAll":  true,
+                                        "name":  "span_name",
+                                        "skipUrlSync":  false,
+                                        "definition":  "label_values(metric_lineage_info{metric_name=~\"$metric\"}, span_name)",
+                                        "type":  "query",
+                                        "label":  "Span name",
+                                        "multi":  true,
+                                        "refresh":  2,
+                                        "sort":  1,
+                                        "datasource":  {
+                                                           "type":  "prometheus",
+                                                           "uid":  "mimir"
+                                                       }
+                                    }
+                                ]
+                   },
+    "time":  {
+                 "to":  "now",
+                 "from":  "now-15m"
+             },
+    "timepicker":  {
+
+                   },
+    "timezone":  "browser",
+    "title":  "Metric Discovery and Lineage",
+    "uid":  "tab-metric-discovery",
+    "version":  1,
+    "weekStart":  ""
+}

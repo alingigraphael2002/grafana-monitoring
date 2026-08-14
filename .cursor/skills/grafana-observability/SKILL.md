@@ -142,6 +142,7 @@ Point at this lab only as reference for metric/log/trace shapes.
 | API Availability and SLO | availability, success rate, latency, error rate, throughput |
 | Structured Application Logs | JSON lines + `trace_id` when possible |
 | API Executive Overview | volume, success rate, 5xx, P95, top failing APIs, SLO breaches |
+| Metric Discovery and Lineage | catalog search, source API, datasource, labels, related logs/traces |
 
 Lab dashboards: `grafana/provisioning/dashboards/json/`.
 Regenerate (UTF-8 no BOM): `grafana/provisioning/dashboards/generate-tab-dashboards.ps1`.
@@ -163,7 +164,7 @@ docker compose ps
 | Alloy | http://localhost:12345 |
 
 Postman: `nestjs-observability-demo/postman/` — folders **01–08** request metrics,
-**09–11** tracing / dependencies / business+SLO.
+**09–11** tracing / dependencies / business+SLO, **12** metric lineage catalog.
 
 ## Per-environment workflow
 

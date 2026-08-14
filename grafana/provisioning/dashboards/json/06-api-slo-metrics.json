@@ -97,6 +97,17 @@
                       "title":  "API Executive Overview",
                       "includeVars":  true,
                       "tooltip":  "API Executive Overview"
+                  },
+                  {
+                      "url":  "/d/tab-metric-discovery",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Metric Discovery",
+                      "includeVars":  true,
+                      "tooltip":  "Deep metric discovery and data lineage"
                   }
               ],
     "liveNow":  true,
@@ -117,13 +128,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Panel link opens Metric Discovery for api_requests_total.",
                        "type":  "stat",
                        "id":  1,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_requests_total",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_requests_total",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_requests_total"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {
@@ -451,13 +478,29 @@
                                        "orientation":  "auto",
                                        "colorMode":  "background"
                                    },
-                       "description":  "",
+                       "description":  "Panel link opens Metric Discovery for api_slo_target.",
                        "type":  "stat",
                        "id":  6,
                        "datasource":  {
                                           "type":  "prometheus",
                                           "uid":  "mimir"
                                       },
+                       "links":  [
+                                     {
+                                         "url":  "/d/tab-metric-discovery?var-metric=api_slo_target",
+                                         "tags":  [
+
+                                                  ],
+                                         "targetBlank":  false,
+                                         "type":  "link",
+                                         "asDropdown":  false,
+                                         "icon":  "dashboard",
+                                         "keepTime":  true,
+                                         "title":  "Lineage: api_slo_target",
+                                         "includeVars":  false,
+                                         "tooltip":  "Open Metric Discovery for api_slo_target"
+                                     }
+                                 ],
                        "fieldConfig":  {
                                            "defaults":  {
                                                             "color":  {

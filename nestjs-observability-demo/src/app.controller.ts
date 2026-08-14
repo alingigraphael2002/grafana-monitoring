@@ -26,6 +26,7 @@ import {
 } from './telemetry.service';
 import { currentTraceContext } from './telemetry-log';
 import { boundedDecimal, boundedInteger } from './numeric-utils';
+import { searchMetricCatalog } from './metric-catalog';
 
 const sleep = (milliseconds: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
@@ -66,6 +67,7 @@ export class AppController {
       message: 'The demo API is running',
       endpoints: ['/health', '/api/hello', '/api/error', '/api/slow?ms=1000', '/api/timeout', '/api/retry', '/api/rate-limit', '/api/echo', '/metrics'],
       telemetry_endpoints: [
+        '/api/observability/catalog',
         '/api/dependencies/:dependency',
         '/api/dependencies/kafka?operation=publish_event|consume_event',
         '/api/checkout',
@@ -90,6 +92,30 @@ export class AppController {
   @Get('health')
   health() {
     return { status: 'ok', timestamp: new Date().toISOString() };
+  }
+
+  @Get('api/observability/catalog')
+  catalog(
+    @Query('q') q?: string,
+    @Query('metric') metric?: string,
+    @Query('family') family?: string,
+    @Query('datasource') datasource?: string,
+    @Query('source_api') sourceApi?: string,
+    @Query('display') display?: string,
+  ) {
+    const entries = searchMetricCatalog({
+      q,
+      metric,
+      family,
+      datasource,
+      source_api: sourceApi,
+      display,
+    });
+    return {
+      count: entries.length,
+      filters: { q, metric, family, datasource, source_api: sourceApi, display },
+      entries,
+    };
   }
 
   @Get('api/hello')

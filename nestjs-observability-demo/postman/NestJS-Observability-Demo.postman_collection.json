@@ -375,6 +375,46 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "12 - Metric Discovery and Lineage",
+      "description": "Search the metric catalog and trace displayed metrics back to source API, datasource, labels, logs, and traces.",
+      "item": [
+        {
+          "name": "Catalog - all entries",
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Catalog returns entries', () => {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().count).to.be.above(0);",
+              "});"
+            ] }
+          }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/observability/catalog" },
+          "response": []
+        },
+        {
+          "name": "Catalog - search timeout",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/observability/catalog?q=timeout" },
+          "response": []
+        },
+        {
+          "name": "Catalog - filter kafka",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/observability/catalog?q=kafka" },
+          "response": []
+        },
+        {
+          "name": "Catalog - mimir datasource",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/observability/catalog?datasource=mimir" },
+          "response": []
+        },
+        {
+          "name": "Catalog - metric name",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/observability/catalog?metric=api_requests_total" },
+          "response": []
+        }
+      ]
     }
   ]
 }

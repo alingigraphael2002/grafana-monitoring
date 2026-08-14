@@ -97,6 +97,17 @@
                       "title":  "API Executive Overview",
                       "includeVars":  true,
                       "tooltip":  "API Executive Overview"
+                  },
+                  {
+                      "url":  "/d/tab-metric-discovery",
+                      "icon":  "dashboard",
+                      "type":  "link",
+                      "targetBlank":  false,
+                      "keepTime":  true,
+                      "asDropdown":  false,
+                      "title":  "Metric Discovery",
+                      "includeVars":  true,
+                      "tooltip":  "Deep metric discovery and data lineage"
                   }
               ],
     "liveNow":  true,
@@ -105,6 +116,43 @@
                        "id":  1,
                        "gridPos":  {
                                        "y":  0,
+                                       "w":  24,
+                                       "x":  0,
+                                       "h":  8
+                                   },
+                       "datasource":  {
+                                          "type":  "tempo",
+                                          "uid":  "tempo"
+                                      },
+                       "title":  "Tempo trace search",
+                       "targets":  [
+                                       {
+                                           "refId":  "A",
+                                           "tableType":  "traces",
+                                           "limit":  20,
+                                           "datasource":  {
+                                                              "type":  "tempo",
+                                                              "uid":  "tempo"
+                                                          },
+                                           "queryType":  "traceqlSearch",
+                                           "query":  "{ resource.service.name = \"nestjs-observability-demo\" }"
+                                       }
+                                   ],
+                       "type":  "traces",
+                       "description":  "Native Tempo results. Open a trace to inspect the checkout span hierarchy.",
+                       "options":  {
+                                       "spanBar":  {
+                                                       "tag":  null,
+                                                       "type":  "None"
+                                                   },
+                                       "showSpanId":  false,
+                                       "showTraceId":  true
+                                   }
+                   },
+                   {
+                       "id":  2,
+                       "gridPos":  {
+                                       "y":  8,
                                        "w":  24,
                                        "x":  0,
                                        "h":  6
@@ -144,7 +192,7 @@
                                   ],
                        "title":  "API gateway",
                        "gridPos":  {
-                                       "y":  6,
+                                       "y":  14,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -153,7 +201,7 @@
                    {
                        "id":  11,
                        "gridPos":  {
-                                       "y":  7,
+                                       "y":  15,
                                        "w":  24,
                                        "x":  0,
                                        "h":  5
@@ -193,7 +241,7 @@
                                   ],
                        "title":  "Authentication and authorisation",
                        "gridPos":  {
-                                       "y":  12,
+                                       "y":  20,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -255,7 +303,7 @@
                                    ],
                        "title":  "Authentication and authorisation success",
                        "gridPos":  {
-                                       "y":  13,
+                                       "y":  21,
                                        "w":  4,
                                        "x":  0,
                                        "h":  4
@@ -317,7 +365,7 @@
                                    ],
                        "title":  "Authentication and authorisation failure",
                        "gridPos":  {
-                                       "y":  13,
+                                       "y":  21,
                                        "w":  4,
                                        "x":  4,
                                        "h":  4
@@ -379,7 +427,7 @@
                                    ],
                        "title":  "P95 latency",
                        "gridPos":  {
-                                       "y":  13,
+                                       "y":  21,
                                        "w":  4,
                                        "x":  8,
                                        "h":  4
@@ -443,7 +491,7 @@
                                    ],
                        "title":  "Ops rate",
                        "gridPos":  {
-                                       "y":  13,
+                                       "y":  21,
                                        "w":  12,
                                        "x":  12,
                                        "h":  4
@@ -458,7 +506,7 @@
                                   ],
                        "title":  "Application logic",
                        "gridPos":  {
-                                       "y":  18,
+                                       "y":  26,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -467,7 +515,7 @@
                    {
                        "id":  18,
                        "gridPos":  {
-                                       "y":  19,
+                                       "y":  27,
                                        "w":  24,
                                        "x":  0,
                                        "h":  5
@@ -507,7 +555,7 @@
                                   ],
                        "title":  "Database query",
                        "gridPos":  {
-                                       "y":  24,
+                                       "y":  32,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -569,7 +617,7 @@
                                    ],
                        "title":  "Database query success",
                        "gridPos":  {
-                                       "y":  25,
+                                       "y":  33,
                                        "w":  4,
                                        "x":  0,
                                        "h":  4
@@ -631,7 +679,7 @@
                                    ],
                        "title":  "Database query failure",
                        "gridPos":  {
-                                       "y":  25,
+                                       "y":  33,
                                        "w":  4,
                                        "x":  4,
                                        "h":  4
@@ -693,7 +741,7 @@
                                    ],
                        "title":  "P95 latency",
                        "gridPos":  {
-                                       "y":  25,
+                                       "y":  33,
                                        "w":  4,
                                        "x":  8,
                                        "h":  4
@@ -757,7 +805,7 @@
                                    ],
                        "title":  "Ops rate",
                        "gridPos":  {
-                                       "y":  25,
+                                       "y":  33,
                                        "w":  12,
                                        "x":  12,
                                        "h":  4
@@ -772,7 +820,7 @@
                                   ],
                        "title":  "Kafka publish or consume",
                        "gridPos":  {
-                                       "y":  30,
+                                       "y":  38,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -834,7 +882,7 @@
                                    ],
                        "title":  "Kafka publish or consume success",
                        "gridPos":  {
-                                       "y":  31,
+                                       "y":  39,
                                        "w":  4,
                                        "x":  0,
                                        "h":  4
@@ -896,7 +944,7 @@
                                    ],
                        "title":  "Kafka publish or consume failure",
                        "gridPos":  {
-                                       "y":  31,
+                                       "y":  39,
                                        "w":  4,
                                        "x":  4,
                                        "h":  4
@@ -958,7 +1006,7 @@
                                    ],
                        "title":  "P95 latency",
                        "gridPos":  {
-                                       "y":  31,
+                                       "y":  39,
                                        "w":  4,
                                        "x":  8,
                                        "h":  4
@@ -1022,7 +1070,7 @@
                                    ],
                        "title":  "Ops rate",
                        "gridPos":  {
-                                       "y":  31,
+                                       "y":  39,
                                        "w":  12,
                                        "x":  12,
                                        "h":  4
@@ -1037,7 +1085,7 @@
                                   ],
                        "title":  "External API call",
                        "gridPos":  {
-                                       "y":  36,
+                                       "y":  44,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -1099,7 +1147,7 @@
                                    ],
                        "title":  "External API call success",
                        "gridPos":  {
-                                       "y":  37,
+                                       "y":  45,
                                        "w":  4,
                                        "x":  0,
                                        "h":  4
@@ -1161,7 +1209,7 @@
                                    ],
                        "title":  "External API call failure",
                        "gridPos":  {
-                                       "y":  37,
+                                       "y":  45,
                                        "w":  4,
                                        "x":  4,
                                        "h":  4
@@ -1223,7 +1271,7 @@
                                    ],
                        "title":  "P95 latency",
                        "gridPos":  {
-                                       "y":  37,
+                                       "y":  45,
                                        "w":  4,
                                        "x":  8,
                                        "h":  4
@@ -1287,7 +1335,7 @@
                                    ],
                        "title":  "Ops rate",
                        "gridPos":  {
-                                       "y":  37,
+                                       "y":  45,
                                        "w":  12,
                                        "x":  12,
                                        "h":  4
@@ -1302,7 +1350,7 @@
                                   ],
                        "title":  "Cache operation",
                        "gridPos":  {
-                                       "y":  42,
+                                       "y":  50,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -1364,7 +1412,7 @@
                                    ],
                        "title":  "Cache operation success",
                        "gridPos":  {
-                                       "y":  43,
+                                       "y":  51,
                                        "w":  4,
                                        "x":  0,
                                        "h":  4
@@ -1426,7 +1474,7 @@
                                    ],
                        "title":  "Cache operation failure",
                        "gridPos":  {
-                                       "y":  43,
+                                       "y":  51,
                                        "w":  4,
                                        "x":  4,
                                        "h":  4
@@ -1488,7 +1536,7 @@
                                    ],
                        "title":  "P95 latency",
                        "gridPos":  {
-                                       "y":  43,
+                                       "y":  51,
                                        "w":  4,
                                        "x":  8,
                                        "h":  4
@@ -1552,7 +1600,7 @@
                                    ],
                        "title":  "Ops rate",
                        "gridPos":  {
-                                       "y":  43,
+                                       "y":  51,
                                        "w":  12,
                                        "x":  12,
                                        "h":  4
@@ -1567,7 +1615,7 @@
                                   ],
                        "title":  "File storage operation",
                        "gridPos":  {
-                                       "y":  48,
+                                       "y":  56,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -1629,7 +1677,7 @@
                                    ],
                        "title":  "File storage operation success",
                        "gridPos":  {
-                                       "y":  49,
+                                       "y":  57,
                                        "w":  4,
                                        "x":  0,
                                        "h":  4
@@ -1691,7 +1739,7 @@
                                    ],
                        "title":  "File storage operation failure",
                        "gridPos":  {
-                                       "y":  49,
+                                       "y":  57,
                                        "w":  4,
                                        "x":  4,
                                        "h":  4
@@ -1753,7 +1801,7 @@
                                    ],
                        "title":  "P95 latency",
                        "gridPos":  {
-                                       "y":  49,
+                                       "y":  57,
                                        "w":  4,
                                        "x":  8,
                                        "h":  4
@@ -1817,7 +1865,7 @@
                                    ],
                        "title":  "Ops rate",
                        "gridPos":  {
-                                       "y":  49,
+                                       "y":  57,
                                        "w":  12,
                                        "x":  12,
                                        "h":  4
@@ -1832,7 +1880,7 @@
                                   ],
                        "title":  "Authorisation (internal)",
                        "gridPos":  {
-                                       "y":  54,
+                                       "y":  62,
                                        "w":  24,
                                        "x":  0,
                                        "h":  1
@@ -1841,7 +1889,7 @@
                    {
                        "id":  201,
                        "gridPos":  {
-                                       "y":  55,
+                                       "y":  63,
                                        "w":  24,
                                        "x":  0,
                                        "h":  5
@@ -1870,43 +1918,6 @@
                                        "sortOrder":  "Descending",
                                        "wrapLogMessage":  true,
                                        "dedupStrategy":  "none"
-                                   }
-                   },
-                   {
-                       "id":  202,
-                       "gridPos":  {
-                                       "y":  60,
-                                       "w":  24,
-                                       "x":  0,
-                                       "h":  8
-                                   },
-                       "datasource":  {
-                                          "type":  "tempo",
-                                          "uid":  "tempo"
-                                      },
-                       "title":  "Tempo trace search",
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "tempo",
-                                                              "uid":  "tempo"
-                                                          },
-                                           "query":  "{ resource.service.name = \"nestjs-observability-demo\" }",
-                                           "queryType":  "traceqlSearch",
-                                           "limit":  20,
-                                           "refId":  "A",
-                                           "tableType":  "traces"
-                                       }
-                                   ],
-                       "type":  "traces",
-                       "description":  "Native Tempo results. Open a trace to inspect the checkout span hierarchy.",
-                       "options":  {
-                                       "showTraceId":  true,
-                                       "showSpanId":  false,
-                                       "spanBar":  {
-                                                       "type":  "None",
-                                                       "tag":  null
-                                                   }
                                    }
                    }
                ],
