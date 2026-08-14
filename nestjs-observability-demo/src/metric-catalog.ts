@@ -23,7 +23,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Request count',
     metric_name: 'api_requests_total',
     family: 'api_request_metrics',
-    source_api: 'HTTP middleware'
+    source_api: 'HTTP middleware',
     datasource: 'mimir',
     origin: 'request-observability.middleware.ts',
     series_family: 'api_requests_total',
@@ -39,7 +39,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Request duration',
     metric_name: 'api_request_duration_seconds',
     family: 'api_request_metrics',
-    source_api: 'HTTP middleware'
+    source_api: 'HTTP middleware',
     datasource: 'mimir',
     origin: 'request-observability.middleware.ts',
     series_family: 'api_request_duration_seconds_bucket|_sum|_count',
@@ -55,7 +55,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Response status',
     metric_name: 'api_requests_total',
     family: 'api_request_metrics',
-    source_api: 'HTTP middleware'
+    source_api: 'HTTP middleware',
     datasource: 'mimir',
     origin: 'request-observability.middleware.ts',
     series_family: 'api_requests_total',
@@ -71,7 +71,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Active requests',
     metric_name: 'api_active_requests',
     family: 'api_request_metrics',
-    source_api: 'HTTP middleware'
+    source_api: 'HTTP middleware',
     datasource: 'mimir',
     origin: 'request-observability.middleware.ts',
     series_family: 'api_active_requests',
@@ -87,7 +87,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Request size',
     metric_name: 'api_request_size_bytes',
     family: 'api_request_metrics',
-    source_api: 'POST /api/echo'
+    source_api: 'POST /api/echo',
     datasource: 'mimir',
     origin: 'request-observability.middleware.ts',
     series_family: 'api_request_size_bytes_bucket|_sum|_count',
@@ -103,7 +103,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Response size',
     metric_name: 'api_response_size_bytes',
     family: 'api_request_metrics',
-    source_api: 'HTTP middleware'
+    source_api: 'HTTP middleware',
     datasource: 'mimir',
     origin: 'request-observability.middleware.ts',
     series_family: 'api_response_size_bytes_bucket|_sum|_count',
@@ -167,7 +167,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Classified errors',
     metric_name: 'api_errors_total',
     family: 'error_telemetry',
-    source_api: 'HTTP errors and checkout'
+    source_api: 'HTTP errors and checkout',
     datasource: 'mimir',
     origin: 'request-observability.middleware.ts and telemetry.service.ts',
     series_family: 'api_errors_total',
@@ -183,7 +183,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Dependency request count',
     metric_name: 'dependency_requests_total',
     family: 'dependency_metrics',
-    source_api: 'GET /api/dependencies or POST /api/checkout'
+    source_api: 'GET /api/dependencies or POST /api/checkout',
     datasource: 'mimir',
     origin: 'telemetry.service.ts runStage()',
     series_family: 'dependency_requests_total',
@@ -199,7 +199,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Dependency duration',
     metric_name: 'dependency_request_duration_seconds',
     family: 'dependency_metrics',
-    source_api: 'GET /api/dependencies or POST /api/checkout'
+    source_api: 'GET /api/dependencies or POST /api/checkout',
     datasource: 'mimir',
     origin: 'telemetry.service.ts runStage()',
     series_family: 'dependency_request_duration_seconds_bucket|_sum|_count',
@@ -215,7 +215,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Dependency availability',
     metric_name: 'dependency_available',
     family: 'dependency_metrics',
-    source_api: 'GET /api/dependencies or POST /api/checkout'
+    source_api: 'GET /api/dependencies or POST /api/checkout',
     datasource: 'mimir',
     origin: 'telemetry.service.ts runStage()',
     series_family: 'dependency_available',
@@ -247,7 +247,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Business revenue',
     metric_name: 'business_revenue_total',
     family: 'business_telemetry',
-    source_api: 'POST /api/checkout'
+    source_api: 'POST /api/checkout',
     datasource: 'mimir',
     origin: 'telemetry.service.ts recordBusinessTransaction()',
     series_family: 'business_revenue_total',
@@ -279,7 +279,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'SLO target',
     metric_name: 'api_slo_target',
     family: 'api_slo',
-    source_api: 'process startup'
+    source_api: 'process startup',
     datasource: 'mimir',
     origin: 'metrics.service.ts constructor',
     series_family: 'api_slo_target',
@@ -295,7 +295,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'SLI violations',
     metric_name: 'api_sli_violations_total',
     family: 'api_slo',
-    source_api: 'HTTP middleware'
+    source_api: 'HTTP middleware',
     datasource: 'mimir',
     origin: 'request-observability.middleware.ts',
     series_family: 'api_sli_violations_total',
@@ -311,7 +311,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Availability',
     metric_name: 'api_requests_total',
     family: 'api_slo',
-    source_api: 'derived from api_requests_total'
+    source_api: 'derived from api_requests_total',
     datasource: 'mimir',
     origin: 'grafana SLO dashboard + HTTP middleware',
     series_family: 'api_requests_total',
@@ -359,7 +359,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Authorisation span',
     metric_name: 'api_errors_total',
     family: 'distributed_tracing',
-    source_api: 'POST /api/checkout'
+    source_api: 'POST /api/checkout',
     datasource: 'tempo',
     origin: 'telemetry.service.ts runInternalStage(authorization)',
     series_family: 'tempo span authorization.authorize_checkout',
@@ -391,7 +391,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Database query span',
     metric_name: 'dependency_requests_total',
     family: 'distributed_tracing',
-    source_api: 'POST /api/checkout'
+    source_api: 'POST /api/checkout',
     datasource: 'tempo',
     origin: 'telemetry.service.ts runDependency(postgresql_citus)',
     series_family: 'simulated postgresql_citus',
@@ -407,7 +407,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Kafka publish or consume span',
     metric_name: 'dependency_requests_total',
     family: 'distributed_tracing',
-    source_api: 'POST /api/checkout'
+    source_api: 'POST /api/checkout',
     datasource: 'tempo',
     origin: 'telemetry.service.ts runDependency(kafka)',
     series_family: 'simulated kafka topic',
@@ -423,7 +423,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'External API call span',
     metric_name: 'dependency_requests_total',
     family: 'distributed_tracing',
-    source_api: 'POST /api/checkout'
+    source_api: 'POST /api/checkout',
     datasource: 'tempo',
     origin: 'telemetry.service.ts runDependency(external_api)',
     series_family: 'simulated external HTTP',
@@ -439,7 +439,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Cache operation span',
     metric_name: 'dependency_requests_total',
     family: 'distributed_tracing',
-    source_api: 'POST /api/checkout'
+    source_api: 'POST /api/checkout',
     datasource: 'tempo',
     origin: 'telemetry.service.ts runDependency(redis_cache)',
     series_family: 'simulated redis_cache',
@@ -455,7 +455,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'File storage span',
     metric_name: 'dependency_requests_total',
     family: 'distributed_tracing',
-    source_api: 'POST /api/checkout'
+    source_api: 'POST /api/checkout',
     datasource: 'tempo',
     origin: 'telemetry.service.ts runDependency(file_storage)',
     series_family: 'simulated file_storage',
@@ -471,7 +471,7 @@ export const metricCatalog: MetricCatalogEntry[] = [
     display_name: 'Structured application logs',
     metric_name: 'api_requests_total',
     family: 'structured_logs',
-    source_api: 'all instrumented endpoints'
+    source_api: 'all instrumented endpoints',
     datasource: 'loki',
     origin: 'telemetry-log.ts writeTelemetryLog()',
     series_family: 'loki stream service_name=nestjs-observability-demo',
