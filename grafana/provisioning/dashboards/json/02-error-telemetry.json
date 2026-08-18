@@ -581,7 +581,7 @@
                        "targets":  [
                                        {
                                            "editorMode":  "code",
-                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | level=~\"error|warn\"",
+                                           "expr":  "{service_name=~\"pre-data-validation-api|nestjs-observability-demo\"} | json | level=~\"error|warn\"",
                                            "refId":  "A",
                                            "queryType":  "range"
                                        }
@@ -615,7 +615,7 @@
                        "targets":  [
                                        {
                                            "editorMode":  "code",
-                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=\"operation_failed\"",
+                                           "expr":  "{service_name=~\"pre-data-validation-api|nestjs-observability-demo\"} | json | event=\"operation_failed\"",
                                            "refId":  "A",
                                            "queryType":  "range"
                                        }

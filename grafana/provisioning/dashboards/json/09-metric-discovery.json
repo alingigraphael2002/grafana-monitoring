@@ -407,7 +407,7 @@
                        "targets":  [
                                        {
                                            "editorMode":  "code",
-                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=~\"$log_event\"",
+                                           "expr":  "{service_name=~\"pre-data-validation-api|nestjs-observability-demo\"} | json | event=~\"$log_event\"",
                                            "refId":  "A",
                                            "queryType":  "range"
                                        }
@@ -448,7 +448,7 @@
                                                               "uid":  "tempo"
                                                           },
                                            "queryType":  "traceqlSearch",
-                                           "query":  "{ resource.service.name = \"nestjs-observability-demo\" \u0026\u0026 name =~ \"$span_name\" }"
+                                           "query":  "{ resource.service.name =~ \"pre-data-validation-api|nestjs-observability-demo\" \u0026\u0026 name =~ \"$span_name\" }"
                                        }
                                    ],
                        "type":  "traces",

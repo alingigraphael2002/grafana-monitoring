@@ -135,7 +135,7 @@
                                                               "uid":  "tempo"
                                                           },
                                            "queryType":  "traceqlSearch",
-                                           "query":  "{ resource.service.name = \"nestjs-observability-demo\" }"
+                                           "query":  "{ resource.service.name =~ \"pre-data-validation-api|nestjs-observability-demo\" }"
                                        }
                                    ],
                        "type":  "traces",
@@ -165,7 +165,7 @@
                        "targets":  [
                                        {
                                            "editorMode":  "code",
-                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=~\"operation_.*|business_transaction|request_completed\"",
+                                           "expr":  "{service_name=~\"pre-data-validation-api|nestjs-observability-demo\"} | json | event=~\"operation_.*|business_transaction|request_completed\"",
                                            "refId":  "A",
                                            "queryType":  "range"
                                        }
@@ -214,7 +214,7 @@
                        "targets":  [
                                        {
                                            "editorMode":  "code",
-                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | stage=\"api_gateway\"",
+                                           "expr":  "{service_name=~\"pre-data-validation-api|nestjs-observability-demo\"} | json | stage=\"api_gateway\"",
                                            "refId":  "A",
                                            "queryType":  "range"
                                        }
@@ -528,7 +528,7 @@
                        "targets":  [
                                        {
                                            "editorMode":  "code",
-                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | stage=\"application_logic\"",
+                                           "expr":  "{service_name=~\"pre-data-validation-api|nestjs-observability-demo\"} | json | stage=\"application_logic\"",
                                            "refId":  "A",
                                            "queryType":  "range"
                                        }
@@ -1902,7 +1902,7 @@
                        "targets":  [
                                        {
                                            "editorMode":  "code",
-                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | stage=\"authorization\"",
+                                           "expr":  "{service_name=~\"pre-data-validation-api|nestjs-observability-demo\"} | json | stage=\"authorization\"",
                                            "refId":  "A",
                                            "queryType":  "range"
                                        }

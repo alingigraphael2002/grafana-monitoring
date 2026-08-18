@@ -41,6 +41,19 @@ prometheus.scrape "nestjs_demo" {
   scrape_interval = "15s"
 }
 
+// Host-run pre-data-validation-api (default PORT 3000)
+prometheus.scrape "pre_data_validation_api" {
+  targets = [
+    {
+      "__address__" = "host.docker.internal:3000",
+      "job"         = "pre-data-validation-api",
+    },
+  ]
+  metrics_path    = "/metrics"
+  forward_to      = [prometheus.remote_write.mimir.receiver]
+  scrape_interval = "15s"
+}
+
 // Discover the demo API container and attach useful Loki stream labels.
 discovery.docker "containers" {
   host = "unix:///var/run/docker.sock"

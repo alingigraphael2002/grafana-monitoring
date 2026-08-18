@@ -584,7 +584,7 @@
                        "targets":  [
                                        {
                                            "editorMode":  "code",
-                                           "expr":  "{service_name=\"nestjs-observability-demo\"} | json | event=\"business_transaction\"",
+                                           "expr":  "{service_name=~\"pre-data-validation-api|nestjs-observability-demo\"} | json | event=\"business_transaction\"",
                                            "refId":  "A",
                                            "queryType":  "range"
                                        }
